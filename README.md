@@ -1,5 +1,6 @@
 # 🏢 Employee Management System (EMS)
 
+<<<<<<< HEAD
 A comprehensive, modern Employee Management System built with the MERN stack featuring real-time notifications, advanced analytics, role-based access control, and much more.
 
 ![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
@@ -60,10 +61,33 @@ A comprehensive, modern Employee Management System built with the MERN stack fea
 - **Docker Compose** - Multi-container orchestration
 - **GitHub Actions** - CI/CD
 - **Nginx** - Reverse proxy
+=======
+A comprehensive full-stack Employee Management System built with the MERN stack.
+
+## ✨ Features
+
+- 👥 **Employee Management** - CRUD operations for staff
+- 🏢 **Department Management** - Organize by departments
+- 📝 **Leave Management** - Apply, approve, reject leaves
+- 💰 **Salary Management** - Process salaries with allowances/deductions
+- 🔐 **Authentication** - JWT + OTP email verification
+- 💳 **Payment Integration** - Razorpay gateway
+- 📊 **Dashboard** - Real-time statistics
+- 🔔 **Email Notifications** - Automated emails
+
+## 🛠️ Tech Stack
+
+**Frontend:** React, React Router, Axios, Bootstrap, Firebase  
+**Backend:** Node.js, Express, MongoDB, Mongoose  
+**Auth:** JWT, Bcrypt  
+**Storage:** Cloudinary  
+**Payments:** Razorpay
+>>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
 
 ## 🚀 Quick Start
 
 ### Prerequisites
+<<<<<<< HEAD
 - Node.js >= 18.0.0
 - MongoDB >= 6.0
 - npm or yarn
@@ -76,4 +100,16 @@ A comprehensive, modern Employee Management System built with the MERN stack fea
 1. **Clone the repository**
 ```bash
 git clone https://github.com/JaseWils/Employee-Management-EMS.git
+=======
+- Node.js v16+
+- MongoDB
+- Gmail account (for OTP emails)
+- Cloudinary account
+
+### Installation
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/YOUR_USERNAME/Employee-Management-EMS.git
+>>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
 cd Employee-Management-EMS

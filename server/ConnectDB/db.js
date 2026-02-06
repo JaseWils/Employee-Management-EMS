@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
     try {
+<<<<<<< HEAD
         const options = {
             serverSelectionTimeoutMS: 5000,
             socketTimeoutMS: 45000,
@@ -35,10 +36,31 @@ const connectDB = async () => {
             await mongoose.connection.close();
             console.log('MongoDB connection closed due to app termination');
             process.exit(0);
+=======
+        const dbURL = process.env.MONGODB_URL;
+        
+        if (!dbURL) {
+            throw new Error("MongoDB connection string is not defined in environment variables");
+        }
+
+        const conn = await mongoose.connect(dbURL);
+
+        console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+        console.log(`📊 Database: ${conn.connection.name}`);
+        
+        // Handle connection errors after initial connection
+        mongoose.connection.on('error', err => {
+            console.error('❌ MongoDB connection error:', err);
+        });
+
+        mongoose.connection.on('disconnected', () => {
+            console.log('⚠️  MongoDB disconnected');
+>>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
         });
 
         return conn;
     } catch (error) {
+<<<<<<< HEAD
         console.error(`
 ╔════════════════════════════════════════════════╗
 ║   ❌ MongoDB Connection Failed                ║
@@ -47,6 +69,10 @@ const connectDB = async () => {
         `);
         console.error('Full error:', error);
         process.exit(1);
+=======
+        console.error("❌ Error connecting to MongoDB:", error.message);
+        throw error;
+>>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
     }
 };
 

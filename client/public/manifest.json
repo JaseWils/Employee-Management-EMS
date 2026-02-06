@@ -1,7 +1,12 @@
 {
+<<<<<<< HEAD
   "short_name": "EMS",
   "name": "Employee Management System",
   "description": "Modern employee management system with real-time features",
+=======
+  "short_name": "React App",
+  "name": "Create React App Sample",
+>>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
   "icons": [
     {
       "src": "favicon.ico",
@@ -21,6 +26,7 @@
   ],
   "start_url": ".",
   "display": "standalone",
+<<<<<<< HEAD
   "theme_color": "#667eea",
   "background_color": "#ffffff",
   "orientation": "portrait-primary",
@@ -33,3 +39,8 @@
     }
   ]
 }
+=======
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
+>>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
