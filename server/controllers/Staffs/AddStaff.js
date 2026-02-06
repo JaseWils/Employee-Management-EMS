@@ -1,6 +1,5 @@
 const Staff = require('../../models/Staff');
-<<<<<<< HEAD
-const User = require('../../models/User');
+const Department = require('../../models/Department');
 const cloudinary = require('cloudinary').v2;
 
 const addStaff = async (req, res) => {
@@ -10,34 +9,36 @@ const addStaff = async (req, res) => {
             email,
             employeeId,
             phone,
+            mobile,
             department,
             position,
+            designation,
             dateOfBirth,
             joiningDate,
+            dateOfJoining,
             gender,
             address,
-            emergencyContact
+            emergencyContact,
+            city,
+            street,
+            state,
+            country,
+            postalCode
         } = req.body;
 
-        console.log('📝 Received data:', {
-            fullName,
-            email,
-            employeeId,
-            department,
-            hasFile: !!req.files
-        });
-
-        // Check if employee ID already exists
-        const existingStaff = await Staff.findOne({ employeeId });
-        if (existingStaff) {
-            return res.status(400).json({
-                success: false,
-                message: 'Employee ID already exists'
-            });
+        // Check if employee ID already exists (if provided)
+        if (employeeId) {
+            const existingStaff = await Staff.findOne({ employeeId });
+            if (existingStaff) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Employee ID already exists'
+                });
+            }
         }
 
         // Check if email already exists
-        const existingEmail = await Staff.findOne({ email });
+        const existingEmail = await Staff.findOne({ email: email.toLowerCase() });
         if (existingEmail) {
             return res.status(400).json({
                 success: false,
@@ -45,11 +46,32 @@ const addStaff = async (req, res) => {
             });
         }
 
+        // Check if mobile already exists (if provided)
+        if (mobile) {
+            const existingMobile = await Staff.findOne({ mobile });
+            if (existingMobile) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Mobile number already exists'
+                });
+            }
+        }
+
+        // Verify department exists
+        if (department) {
+            const deptExists = await Department.findById(department);
+            if (!deptExists) {
+                return res.status(400).json({ 
+                    success: false,
+                    message: 'Department not found' 
+                });
+            }
+        }
+
         let profileImageUrl = null;
 
-        // Upload profile image ONLY if Cloudinary is configured AND file exists
+        // Upload profile image if Cloudinary is configured AND file exists
         if (req.files && req.files.profileImage) {
-            // Check if Cloudinary is properly configured
             const isCloudinaryConfigured = 
                 process.env.CLOUDINARY_CLOUD_NAME && 
                 process.env.CLOUDINARY_API_KEY && 
@@ -61,42 +83,44 @@ const addStaff = async (req, res) => {
             if (isCloudinaryConfigured) {
                 try {
                     const file = req.files.profileImage;
-                    
-                    console.log('📸 Uploading image to Cloudinary...');
                     const result = await cloudinary.uploader.upload(file.tempFilePath, {
                         folder: 'ems/employees',
-                        public_id: `employee_${employeeId}`,
+                        public_id: `employee_${employeeId || Date.now()}`,
                         overwrite: true
                     });
-
                     profileImageUrl = result.secure_url;
-                    console.log('✅ Image uploaded successfully');
                 } catch (uploadError) {
                     console.error('⚠️ Cloudinary upload failed:', uploadError.message);
-                    // Continue without image instead of failing
-                    console.log('⚠️ Continuing without profile image');
                 }
-            } else {
-                console.log('⚠️ Cloudinary not configured, skipping image upload');
             }
         }
 
-        // Parse address if it's a string
-        const parsedAddress = typeof address === 'string' ? JSON.parse(address) : address;
-        const parsedEmergencyContact = typeof emergencyContact === 'string' ? JSON.parse(emergencyContact) : emergencyContact;
+        // Parse address - support both object and individual fields
+        let parsedAddress = {};
+        if (typeof address === 'string') {
+            parsedAddress = JSON.parse(address);
+        } else if (address) {
+            parsedAddress = address;
+        } else {
+            parsedAddress = { street, city, state, country, postalCode };
+        }
 
-        console.log('💾 Creating staff record...');
+        const parsedEmergencyContact = typeof emergencyContact === 'string' 
+            ? JSON.parse(emergencyContact) 
+            : emergencyContact;
 
         // Create staff member
         const staff = await Staff.create({
             fullName,
-            email,
+            email: email.toLowerCase(),
             employeeId,
-            phone,
+            phone: phone || mobile,
+            mobile,
             department,
-            position,
-            dateOfBirth,
-            joiningDate: joiningDate || new Date(),
+            position: position || designation,
+            designation,
+            dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : undefined,
+            joiningDate: joiningDate || dateOfJoining || new Date(),
             gender,
             address: parsedAddress,
             emergencyContact: parsedEmergencyContact,
@@ -104,9 +128,12 @@ const addStaff = async (req, res) => {
             isActive: true
         });
 
-        const populatedStaff = await Staff.findById(staff._id).populate('department', 'name');
+        // Update department employee count
+        if (department) {
+            await Department.findByIdAndUpdate(department, { $inc: { employeeCount: 1 } });
+        }
 
-        console.log('✅ Employee created successfully:', staff.fullName);
+        const populatedStaff = await Staff.findById(staff._id).populate('department', 'name');
 
         return res.status(201).json({
             success: true,
@@ -115,7 +142,7 @@ const addStaff = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('❌ Add staff error:', error);
+        console.error('Add staff error:', error);
         return res.status(500).json({
             success: false,
             message: 'Error adding employee',
@@ -125,72 +152,3 @@ const addStaff = async (req, res) => {
 };
 
 module.exports = addStaff;
-=======
-const Department = require('../../models/Department');
-
-const addStaff = async (req, res) => {
-    const { 
-        fullName, department, gender, email, mobile, photo, 
-        dateOfBirth, dateOfJoining, city, state, country, street, postalCode, designation 
-    } = req.body;
-    
-    try {
-        const checkEmail = await Staff.findOne({ email: email.toLowerCase() });
-
-        if (checkEmail) {
-            return res.status(400).json({ error: 'Email already exists' });
-        }
-
-        const checkMobile = await Staff.findOne({ mobile });
-
-        if (checkMobile) {
-            return res.status(400).json({ error: 'Mobile number already exists' });
-        }
-
-        // Verify department exists
-        const deptExists = await Department.findById(department);
-        if (!deptExists) {
-            return res.status(400).json({ error: 'Department not found' });
-        }
-
-        const newStaff = new Staff({
-            fullName,
-            department,
-            gender,
-            email,
-            mobile,
-            photo: photo || '',
-            dateOfBirth: new Date(dateOfBirth),
-            dateOfJoining: dateOfJoining ? new Date(dateOfJoining) : new Date(),
-            address: {
-                street,
-                city,
-                state,
-                country,
-                postalCode
-            },
-            designation
-        });
-
-        await newStaff.save();
-
-        // Update department employee count
-        await Department.findByIdAndUpdate(department, { $inc: { employeeCount: 1 } });
-
-        // Populate department info before returning
-        await newStaff.populate('department', 'name');
-
-        res.status(201).json({ 
-            message: 'Staff added successfully',
-            data: newStaff,
-            success: true
-        });
-    } catch (error) {
-        console.log("Error in addstaff controller", error);
-        console.error(error);
-        res.status(500).json({ error: 'Server error', message: error.message });
-    }
-};
-
-module.exports = addStaff;
->>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d

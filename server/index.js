@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-<<<<<<< HEAD
 const http = require('http');
 const server = http.createServer(app);
 const cors = require('cors');
@@ -63,28 +62,6 @@ app.use(fileUpload({
     tempFileDir: '/tmp/',
     createParentPath: true,
     limits: { fileSize: 50 * 1024 * 1024 }, // 50MB max
-=======
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const connectDB = require('./ConnectDB/db');
-const router = require('./routes/routes');
-const fileUpload = require('express-fileupload');
-
-const PORT = process.env.PORT || 5800;
-
-// Cloudinary Configuration
-const cloudinary = require('cloudinary').v2;
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-// Middleware
-app.use(fileUpload({
-    useTempFiles: true,
-    tempFileDir: '/tmp/'
->>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
 }));
 
 // CORS configuration
@@ -106,16 +83,8 @@ app.get('/', (req, res) => {
     res.json({
         success: true,
         message: "Employee Management System API is running",
-<<<<<<< HEAD
         version: "2.0.0",
         timestamp: new Date().toISOString()
-=======
-        version: "1.0.0",
-        endpoints: {
-            api: "/api/v1",
-            health: "/health"
-        }
->>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
     });
 });
 
@@ -123,12 +92,8 @@ app.get('/health', (req, res) => {
     res.json({
         success: true,
         message: "Server is healthy",
-<<<<<<< HEAD
         timestamp: new Date().toISOString(),
         uptime: process.uptime()
-=======
-        timestamp: new Date().toISOString()
->>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
     });
 });
 
@@ -139,18 +104,13 @@ app.use('/api/v1', router);
 app.use((req, res) => {
     res.status(404).json({
         success: false,
-<<<<<<< HEAD
         message: "Route not found",
         path: req.path
-=======
-        message: "Route not found"
->>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
     });
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-<<<<<<< HEAD
     console.error('Error:', err);
     res.status(err.status || 500).json({
         success: false,
@@ -159,34 +119,21 @@ app.use((err, req, res, next) => {
             stack: err.stack,
             error: err 
         })
-=======
-    console.error(err.stack);
-    res.status(err.status || 500).json({
-        success: false,
-        message: err.message || "Internal Server Error",
-        ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
->>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
     });
 });
 
 // Connect to Database and Start Server
 connectDB()
-<<<<<<< HEAD
     .then(async () => {
         // Seed roles on startup
         await seedRoles();
         
         server.listen(PORT, () => {
             const cloudinaryStatus = isCloudinaryConfigured ? '✅ Connected' : '⚠️  Not configured';
-=======
-    .then(() => {
-        app.listen(PORT, () => {
->>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
             console.log(`
 ╔═══════════════════════════════════════════════╗
 ║   🚀 Employee Management System Server       ║
 ║   📡 Port: ${PORT}                           ║
-<<<<<<< HEAD
 ║   🌍 Environment: ${process.env.NODE_ENV || 'development'}              ║
 ║   📅 Started: ${new Date().toLocaleString()} ║
 ║   🔌 Socket.IO: ✅ Enabled                    ║
@@ -195,11 +142,6 @@ connectDB()
 
 🔗 API: http://localhost:${PORT}
 🔗 Health: http://localhost:${PORT}/health
-=======
-║   🌍 Environment: ${process.env.NODE_ENV}    ║
-║   📅 Started: ${new Date().toLocaleString()} ║
-╚═══════════════════════════════════════════════╝
->>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
             `);
         });
     })
@@ -211,14 +153,10 @@ connectDB()
 // Graceful shutdown
 process.on('SIGINT', () => {
     console.log('\n🛑 Shutting down gracefully...');
-<<<<<<< HEAD
     server.close(() => {
         console.log('✅ Server closed');
         process.exit(0);
     });
-=======
-    process.exit(0);
->>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
 });
 
 module.exports = app;
