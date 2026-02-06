@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import './styles/dark-mode.css';
 import App from './App';
 import { ThemeProvider } from './context/ThemeContext';
+import './index.css';
 import reportWebVitals from './reportWebVitals';
+import './styles/dark-mode-complete.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import './ModernSidebar.css';
 
 const ModernSidebar = ({ isOpen, toggleSidebar }) => {
     const [user, setUser] = useState(null);
     const [activeSubmenu, setActiveSubmenu] = useState(null);
     const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // Get user from localStorage or context
         const userData = JSON.parse(localStorage.getItem('user') || '{}');
         setUser(userData);
     }, []);
@@ -53,7 +53,7 @@ const ModernSidebar = ({ isOpen, toggleSidebar }) => {
             icon: 'fa-money-bill-wave',
             submenu: [
                 { title: 'Salary Management', path: '/salary', icon: 'fa-dollar-sign' },
-                { title: 'Generate Payroll', path: '/generate-payroll', icon: 'fa-calculator' },
+                { title: 'Process Payroll', path: '/payroll-process', icon: 'fa-calculator' },
                 { title: 'Payslips', path: '/payslips', icon: 'fa-file-invoice-dollar' }
             ]
         },
@@ -66,20 +66,12 @@ const ModernSidebar = ({ isOpen, toggleSidebar }) => {
         {
             title: 'Documents',
             icon: 'fa-folder-open',
-            submenu: [
-                { title: 'All Documents', path: '/documents', icon: 'fa-file-alt' },
-                { title: 'Upload Document', path: '/upload-document', icon: 'fa-upload' },
-                { title: 'Verify Documents', path: '/verify-documents', icon: 'fa-check-double' }
-            ]
+            path: '/documents'
         },
         {
             title: 'Performance',
             icon: 'fa-star',
-            submenu: [
-                { title: 'Reviews', path: '/performance-reviews', icon: 'fa-clipboard-check' },
-                { title: 'Goals', path: '/goals', icon: 'fa-bullseye' },
-                { title: 'Feedback', path: '/feedback', icon: 'fa-comments' }
-            ]
+            path: '/performance'
         },
         {
             title: 'Analytics',
@@ -89,11 +81,7 @@ const ModernSidebar = ({ isOpen, toggleSidebar }) => {
         {
             title: 'Settings',
             icon: 'fa-cog',
-            submenu: [
-                { title: 'Profile', path: '/profile', icon: 'fa-user-circle' },
-                { title: 'Roles & Permissions', path: '/roles', icon: 'fa-shield-alt' },
-                { title: 'System Settings', path: '/settings', icon: 'fa-sliders-h' }
-            ]
+            path: '/settings'
         }
     ];
 
@@ -102,15 +90,16 @@ const ModernSidebar = ({ isOpen, toggleSidebar }) => {
     };
 
     const handleLogout = () => {
-        localStorage.clear();
-        window.location.href = '/login';
+        if (window.confirm('Are you sure you want to logout?')) {
+            localStorage.clear();
+            navigate('/login');
+        }
     };
 
     return (
         <>
             <div className={`sidebar-overlay ${isOpen ? 'active' : ''}`} onClick={toggleSidebar}></div>
             <aside className={`modern-sidebar ${isOpen ? 'open' : ''}`}>
-                {/* Sidebar Header */}
                 <div className="sidebar-header">
                     <div className="logo-section">
                         <div className="logo-icon">
@@ -126,11 +115,10 @@ const ModernSidebar = ({ isOpen, toggleSidebar }) => {
                     </button>
                 </div>
 
-                {/* User Profile Card */}
                 <div className="user-profile-card">
                     <div className="user-avatar">
                         <img 
-                            src={user?.profileImage || 'https://ui-avatars.com/api/?name=Admin&background=667eea&color=fff'} 
+                            src={user?.profileImage || `https://ui-avatars.com/api/?name=${user?.name || 'Admin'}&background=667eea&color=fff`}
                             alt="User" 
                         />
                         <span className="status-indicator online"></span>
@@ -140,7 +128,7 @@ const ModernSidebar = ({ isOpen, toggleSidebar }) => {
                         <p>{user?.role || 'Administrator'}</p>
                     </div>
                     <div className="user-actions">
-                        <button className="btn-icon" title="Settings">
+                        <button className="btn-icon" title="Settings" onClick={() => navigate('/settings')}>
                             <i className="fa fa-cog"></i>
                         </button>
                         <button className="btn-icon" onClick={handleLogout} title="Logout">
@@ -149,7 +137,6 @@ const ModernSidebar = ({ isOpen, toggleSidebar }) => {
                     </div>
                 </div>
 
-                {/* Navigation Menu */}
                 <nav className="sidebar-nav">
                     {menuItems.map((item, index) => (
                         <div key={index} className="nav-item-wrapper">
@@ -195,7 +182,6 @@ const ModernSidebar = ({ isOpen, toggleSidebar }) => {
                     ))}
                 </nav>
 
-                {/* Quick Actions Footer */}
                 <div className="sidebar-footer">
                     <div className="quick-action-card">
                         <div className="qac-icon">
@@ -205,7 +191,7 @@ const ModernSidebar = ({ isOpen, toggleSidebar }) => {
                             <h5>Need Help?</h5>
                             <p>Check our documentation</p>
                         </div>
-                        <button className="qac-btn">
+                        <button className="qac-btn" onClick={() => navigate('/help')}>
                             <i className="fa fa-arrow-right"></i>
                         </button>
                     </div>

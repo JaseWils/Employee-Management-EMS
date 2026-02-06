@@ -3,94 +3,42 @@ const mongoose = require('mongoose');
 const taskSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
-    description: String,
-    project: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Project'
+    description: {
+        type: String,
+        required: true
     },
     assignedTo: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Staff',
         required: true
     },
-    assignedBy: {
+    createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    status: {
-        type: String,
-        enum: ['todo', 'in_progress', 'review', 'completed', 'cancelled'],
-        default: 'todo'
-    },
     priority: {
         type: String,
-        enum: ['low', 'medium', 'high', 'urgent'],
+        enum: ['low', 'medium', 'high'],
         default: 'medium'
     },
-    dueDate: Date,
-    startDate: Date,
-    completedAt: Date,
-    estimatedHours: Number,
-    actualHours: Number,
-    tags: [String],
-    attachments: [{
-        name: String,
-        url: String,
-        cloudinaryId: String,
-        uploadedAt: Date
-    }],
-    comments: [{
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        text: String,
-        createdAt: {
-            type: Date,
-            default: Date.now
-        }
-    }],
-    checklist: [{
-        item: String,
-        completed: {
-            type: Boolean,
-            default: false
-        },
-        completedBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        completedAt: Date
-    }],
-    dependencies: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Task'
-    }],
-    watchers: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }],
-    isRecurring: {
-        type: Boolean,
-        default: false
+    status: {
+        type: String,
+        enum: ['todo', 'in-progress', 'done'],
+        default: 'todo'
     },
-    recurrence: {
-        frequency: {
-            type: String,
-            enum: ['daily', 'weekly', 'monthly', 'yearly']
-        },
-        interval: Number,
-        endDate: Date
+    dueDate: {
+        type: Date,
+        required: true
+    },
+    completedAt: {
+        type: Date
     }
 }, {
     timestamps: true
 });
-
-taskSchema.index({ assignedTo: 1, status: 1 });
-taskSchema.index({ project: 1 });
-taskSchema.index({ dueDate: 1 });
 
 module.exports = mongoose.model('Task', taskSchema);

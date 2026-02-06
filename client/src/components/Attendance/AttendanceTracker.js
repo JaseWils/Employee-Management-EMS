@@ -3,100 +3,76 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import './AttendanceTracker.css';
 
-const AttendanceTracker = ({ employeeId }) => {
-    const [attendance, setAttendance] = useState(null);
+const AttendanceTracker = () => {
     const [loading, setLoading] = useState(false);
-    const [timer, setTimer] = useState('00:00:00');
-    const [onBreak, setOnBreak] = useState(false);
+    const [todayAttendance, setTodayAttendance] = useState(null);
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    // Get user from localStorage
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const employeeId = user.id || localStorage.getItem('employeeId');
 
     useEffect(() => {
-        fetchTodayAttendance();
+        checkTodayAttendance();
+        
+        // Update clock every second
+        const timer = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 1000);
+
+        return () => clearInterval(timer);
     }, []);
 
-    useEffect(() => {
-        let interval;
-        if (attendance && attendance.checkIn && !attendance.checkOut) {
-            interval = setInterval(() => {
-                updateTimer();
-            }, 1000);
+    const checkTodayAttendance = async () => {
+        if (!employeeId) {
+            console.log('No employee ID found');
+            return;
         }
-        return () => clearInterval(interval);
-    }, [attendance]);
 
-    const fetchTodayAttendance = async () => {
         try {
             const token = localStorage.getItem('token');
-            const today = new Date().toISOString().split('T')[0];
             const response = await axios.get(
                 `${process.env.REACT_APP_API_URL}/api/v1/attendance/${employeeId}`,
                 {
                     headers: { Authorization: `Bearer ${token}` },
-                    params: { startDate: today, endDate: today }
+                    params: {
+                        date: new Date().toISOString().split('T')[0]
+                    }
                 }
             );
-            
-            if (response.data.data && response.data.data.length > 0) {
-                setAttendance(response.data.data[0]);
-                checkBreakStatus(response.data.data[0]);
+
+            if (response.data.success && response.data.data.length > 0) {
+                setTodayAttendance(response.data.data[0]);
             }
         } catch (error) {
-            console.error('Error fetching attendance:', error);
+            console.error('Error checking attendance:', error);
         }
-    };
-
-    const checkBreakStatus = (attendanceData) => {
-        if (attendanceData.breaks && attendanceData.breaks.length > 0) {
-            const lastBreak = attendanceData.breaks[attendanceData.breaks.length - 1];
-            setOnBreak(!lastBreak.endTime);
-        }
-    };
-
-    const updateTimer = () => {
-        if (!attendance || !attendance.checkIn) return;
-
-        const now = new Date();
-        const checkInTime = new Date(attendance.checkIn.time);
-        let diff = now - checkInTime;
-
-        // Subtract break time
-        if (attendance.breaks) {
-            attendance.breaks.forEach(breakItem => {
-                if (breakItem.endTime) {
-                    const breakDuration = new Date(breakItem.endTime) - new Date(breakItem.startTime);
-                    diff -= breakDuration;
-                } else {
-                    // Current active break
-                    const breakDuration = now - new Date(breakItem.startTime);
-                    diff -= breakDuration;
-                }
-            });
-        }
-
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-        setTimer(
-            `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
-        );
     };
 
     const handleCheckIn = async () => {
+        if (!employeeId) {
+            toast.error('Employee ID not found. Please login again.');
+            return;
+        }
+
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/api/v1/attendance/check-in/${employeeId}`,
                 {
-                    location: await getLocation(),
+                    location: 'Office',
                     method: 'web'
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            
-            setAttendance(response.data.data);
-            toast.success('✅ Checked in successfully!');
+
+            if (response.data.success) {
+                toast.success('✅ Checked in successfully!');
+                checkTodayAttendance();
+            }
         } catch (error) {
+            console.error('Check-in error:', error);
             toast.error(error.response?.data?.message || 'Error checking in');
         } finally {
             setLoading(false);
@@ -104,106 +80,75 @@ const AttendanceTracker = ({ employeeId }) => {
     };
 
     const handleCheckOut = async () => {
+        if (!employeeId) {
+            toast.error('Employee ID not found. Please login again.');
+            return;
+        }
+
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/api/v1/attendance/check-out/${employeeId}`,
                 {
-                    location: await getLocation()
+                    location: 'Office'
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            
-            setAttendance(response.data.data);
-            toast.success('✅ Checked out successfully!');
+
+            if (response.data.success) {
+                toast.success('✅ Checked out successfully!');
+                checkTodayAttendance();
+            }
         } catch (error) {
+            console.error('Check-out error:', error);
             toast.error(error.response?.data?.message || 'Error checking out');
         } finally {
             setLoading(false);
         }
     };
 
-    const handleBreak = async (type) => {
-        setLoading(true);
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/api/v1/attendance/break/${employeeId}`,
-                { type },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            
-            setAttendance(response.data.data);
-            setOnBreak(type === 'start');
-            toast.success(type === 'start' ? '☕ Break started' : '✅ Break ended');
-        } catch (error) {
-            toast.error(error.response?.data?.message || 'Error managing break');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const getLocation = () => {
-        return new Promise((resolve) => {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        resolve(`${position.coords.latitude}, ${position.coords.longitude}`);
-                    },
-                    () => resolve('Unknown')
-                );
-            } else {
-                resolve('Unknown');
-            }
-        });
-    };
-
-    const formatTime = (dateString) => {
-        if (!dateString) return '--:--';
-        const date = new Date(dateString);
-        return date.toLocaleTimeString('en-US', { 
-            hour: '2-digit', 
+    const formatTime = (time) => {
+        return currentTime.toLocaleTimeString('en-US', {
+            hour: '2-digit',
             minute: '2-digit',
-            hour12: true 
+            second: '2-digit'
         });
     };
 
-    const getTotalBreakTime = () => {
-        if (!attendance || !attendance.breaks) return '0 min';
-        
-        let totalMs = 0;
-        attendance.breaks.forEach(breakItem => {
-            if (breakItem.duration) {
-                totalMs += breakItem.duration * 60 * 1000;
-            }
+    const formatDate = () => {
+        return currentTime.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
         });
-
-        const minutes = Math.floor(totalMs / (1000 * 60));
-        return `${minutes} min`;
     };
 
     return (
         <div className="attendance-tracker">
-            <div className="tracker-header">
-                <h2>
-                    <i className="fa fa-clock"></i> Attendance Tracker
-                </h2>
-                <span className="tracker-date">{new Date().toLocaleDateString('en-US', { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
-                })}</span>
+            <div className="attendance-header">
+                <div className="header-icon">
+                    <i className="fa fa-clock"></i>
+                </div>
+                <h1>Attendance Tracker</h1>
+                <p className="date-time">{formatDate()}</p>
             </div>
 
-            <div className="tracker-body">
-                {!attendance || !attendance.checkIn ? (
-                    <div className="check-in-section">
-                        <div className="welcome-message">
-                            <h3>Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 18 ? 'Afternoon' : 'Evening'}! 👋</h3>
-                            <p>Ready to start your day?</p>
-                        </div>
+            <div className="time-display">
+                <div className="current-time">{formatTime()}</div>
+                <p className="greeting">Good Morning! 👋</p>
+                <p className="ready-text">Ready to start your day?</p>
+            </div>
+
+            {!employeeId ? (
+                <div className="error-state">
+                    <i className="fa fa-exclamation-triangle"></i>
+                    <p>Employee ID not found. Please login again.</p>
+                </div>
+            ) : (
+                <div className="attendance-actions">
+                    {!todayAttendance || !todayAttendance.checkIn ? (
                         <button
                             className="btn-check-in"
                             onClick={handleCheckIn}
@@ -211,8 +156,8 @@ const AttendanceTracker = ({ employeeId }) => {
                         >
                             {loading ? (
                                 <>
-                                    <div className="btn-spinner"></div>
-                                    Checking In...
+                                    <span className="spinner"></span>
+                                    Checking in...
                                 </>
                             ) : (
                                 <>
@@ -221,89 +166,51 @@ const AttendanceTracker = ({ employeeId }) => {
                                 </>
                             )}
                         </button>
-                    </div>
-                ) : (
-                    <div className="active-session">
-                        <div className="timer-display">
-                            <span className="timer-label">Work Time</span>
-                            <span className="timer-value">{timer}</span>
-                            {onBreak && <span className="break-badge">On Break</span>}
-                        </div>
-
-                        <div className="session-info">
-                            <div className="info-item">
-                                <i className="fa fa-sign-in-alt"></i>
-                                <div>
-                                    <span className="info-label">Check In</span>
-                                    <span className="info-value">{formatTime(attendance.checkIn.time)}</span>
-                                </div>
+                    ) : !todayAttendance.checkOut ? (
+                        <div className="checked-in-state">
+                            <div className="status-card">
+                                <i className="fa fa-check-circle"></i>
+                                <h3>You're checked in!</h3>
+                                <p>Check-in time: {new Date(todayAttendance.checkIn).toLocaleTimeString()}</p>
                             </div>
-
-                            {attendance.checkOut && (
-                                <div className="info-item">
-                                    <i className="fa fa-sign-out-alt"></i>
+                            <button
+                                className="btn-check-out"
+                                onClick={handleCheckOut}
+                                disabled={loading}
+                            >
+                                {loading ? (
+                                    <>
+                                        <span className="spinner"></span>
+                                        Checking out...
+                                    </>
+                                ) : (
+                                    <>
+                                        <i className="fa fa-sign-out-alt"></i>
+                                        Check Out
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="checked-out-state">
+                            <div className="status-card success">
+                                <i className="fa fa-check-double"></i>
+                                <h3>Day Complete!</h3>
+                                <div className="time-summary">
                                     <div>
-                                        <span className="info-label">Check Out</span>
-                                        <span className="info-value">{formatTime(attendance.checkOut.time)}</span>
+                                        <span>Check-in:</span>
+                                        <strong>{new Date(todayAttendance.checkIn).toLocaleTimeString()}</strong>
+                                    </div>
+                                    <div>
+                                        <span>Check-out:</span>
+                                        <strong>{new Date(todayAttendance.checkOut).toLocaleTimeString()}</strong>
                                     </div>
                                 </div>
-                            )}
-
-                            <div className="info-item">
-                                <i className="fa fa-coffee"></i>
-                                <div>
-                                    <span className="info-label">Break Time</span>
-                                    <span className="info-value">{getTotalBreakTime()}</span>
-                                </div>
-                            </div>
-
-                            <div className="info-item">
-                                <i className="fa fa-hourglass-half"></i>
-                                <div>
-                                    <span className="info-label">Work Hours</span>
-                                    <span className="info-value">
-                                        {attendance.workHours ? `${attendance.workHours.toFixed(2)} hrs` : '0 hrs'}
-                                    </span>
-                                </div>
                             </div>
                         </div>
-
-                        {!attendance.checkOut && (
-                            <div className="action-buttons">
-                                <button
-                                    className={`btn-break ${onBreak ? 'active' : ''}`}
-                                    onClick={() => handleBreak(onBreak ? 'end' : 'start')}
-                                    disabled={loading}
-                                >
-                                    <i className={`fa fa-${onBreak ? 'play' : 'pause'}`}></i>
-                                    {onBreak ? 'End Break' : 'Take Break'}
-                                </button>
-
-                                <button
-                                    className="btn-check-out"
-                                    onClick={handleCheckOut}
-                                    disabled={loading || onBreak}
-                                >
-                                    <i className="fa fa-sign-out-alt"></i>
-                                    Check Out
-                                </button>
-                            </div>
-                        )}
-
-                        {attendance.checkOut && (
-                            <div className="session-complete">
-                                <i className="fa fa-check-circle"></i>
-                                <p>Session completed for today!</p>
-                                {attendance.overtime > 0 && (
-                                    <p className="overtime-badge">
-                                        🎉 Overtime: {attendance.overtime.toFixed(2)} hours
-                                    </p>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 };

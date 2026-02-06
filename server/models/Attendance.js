@@ -8,85 +8,41 @@ const attendanceSchema = new mongoose.Schema({
     },
     date: {
         type: Date,
-        required: true
+        required: true,
+        default: Date.now
     },
     checkIn: {
-        time: {
-            type: Date,
-            required: true
-        },
-        location: {
-            type: String
-        },
-        ipAddress: String,
-        method: {
-            type: String,
-            enum: ['manual', 'biometric', 'web', 'mobile'],
-            default: 'web'
-        }
+        type: Date
     },
     checkOut: {
-        time: Date,
-        location: String,
-        ipAddress: String
+        type: Date
     },
     status: {
         type: String,
-        enum: ['present', 'absent', 'half_day', 'late', 'on_leave', 'holiday', 'weekend'],
-        default: 'present'
+        enum: ['present', 'absent', 'half-day', 'late'],
+        default: 'absent'
     },
     workHours: {
-        type: Number, // in hours
+        type: Number,
         default: 0
     },
-    overtime: {
-        type: Number, // in hours
-        default: 0
+    location: {
+        type: String,
+        default: 'Office'
     },
-    breaks: [{
-        startTime: Date,
-        endTime: Date,
-        duration: Number // in minutes
-    }],
-    notes: String,
-    approvedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+    method: {
+        type: String,
+        enum: ['web', 'mobile', 'biometric'],
+        default: 'web'
     },
-    isManualEntry: {
-        type: Boolean,
-        default: false
+    notes: {
+        type: String
     }
 }, {
     timestamps: true
 });
 
 // Index for faster queries
-attendanceSchema.index({ employee: 1, date: 1 });
-
-// Calculate work hours before saving
-attendanceSchema.pre('save', function(next) {
-    if (this.checkIn.time && this.checkOut.time) {
-        const diffMs = this.checkOut.time - this.checkIn.time;
-        const diffHours = diffMs / (1000 * 60 * 60);
-        
-        // Calculate break time
-        let totalBreakHours = 0;
-        if (this.breaks && this.breaks.length > 0) {
-            this.breaks.forEach(breakItem => {
-                if (breakItem.endTime && breakItem.startTime) {
-                    totalBreakHours += (breakItem.endTime - breakItem.startTime) / (1000 * 60 * 60);
-                }
-            });
-        }
-        
-        this.workHours = Math.max(0, diffHours - totalBreakHours);
-        
-        // Calculate overtime (assuming 8 hour work day)
-        const standardHours = 8;
-        this.overtime = Math.max(0, this.workHours - standardHours);
-    }
-    next();
-});
+attendanceSchema.index({ employee: 1, date: -1 });
 
 module.exports = mongoose.model('Attendance', attendanceSchema);

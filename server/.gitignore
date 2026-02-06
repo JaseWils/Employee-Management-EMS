@@ -1,2 +1,25 @@
-node_modules
+# Server specific
+
+# Dependencies
+node_modules/
+
+# Environment
 .env
+.env.*
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Database
+data/
+*.db
+
+# Temp files
+tmp/
+uploads/
+
+# Build
+dist/
+build/

@@ -8,29 +8,8 @@ const leaveSchema = new mongoose.Schema({
     },
     leaveType: {
         type: String,
-<<<<<<< HEAD
-        enum: ['sick', 'casual', 'annual', 'maternity', 'paternity', 'unpaid'],
-        required: true
-    },
-    startDate: {
-        type: Date,
-        required: true
-    },
-    endDate: {
-        type: Date,
-        required: true
-    },
-    reason: {
-        type: String,
-        required: true
-    },
-    status: {
-        type: String,
-        enum: ['pending', 'approved', 'rejected'],
-        default: 'pending'
-=======
         required: [true, 'Leave type is required'],
-        enum: ['Sick', 'Casual', 'Earned', 'Maternity', 'Paternity', 'Other']
+        enum: ['sick', 'casual', 'annual', 'maternity', 'paternity', 'unpaid', 'Sick', 'Casual', 'Earned', 'Maternity', 'Paternity', 'Other']
     },
     startDate: {
         type: Date,
@@ -55,22 +34,13 @@ const leaveSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['Pending', 'Approved', 'Rejected'],
-        default: 'Pending'
->>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
+        enum: ['pending', 'approved', 'rejected', 'Pending', 'Approved', 'Rejected'],
+        default: 'pending'
     },
     approvedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-<<<<<<< HEAD
-    approvedAt: Date,
-    rejectionReason: String,
-    documents: [{
-        url: String,
-        uploadedAt: Date
-    }]
-=======
     approvedAt: {
         type: Date
     },
@@ -79,16 +49,16 @@ const leaveSchema = new mongoose.Schema({
         trim: true
     },
     numberOfDays: {
-        type: Number,
-        required: true
-    }
->>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
+        type: Number
+    },
+    documents: [{
+        url: String,
+        uploadedAt: Date
+    }]
 }, {
     timestamps: true
 });
 
-<<<<<<< HEAD
-=======
 // Calculate number of days before saving
 leaveSchema.pre('save', function(next) {
     if (this.startDate && this.endDate) {
@@ -98,5 +68,4 @@ leaveSchema.pre('save', function(next) {
     next();
 });
 
->>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
 module.exports = mongoose.model('Leave', leaveSchema);

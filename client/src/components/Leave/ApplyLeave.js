@@ -1,143 +1,274 @@
-import React, { useState } from "react";
-import "./ApplyLeave.css";
-import { NavLink } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import './ApplyLeave.css';
 
-export default function ApplyLeave() {
-  let boxstyle = {
-    background: "white",
-    padding: "21px",
-    borderTop: "5px solid #004dffe8",
-    borderRadius: "5px",
-  };
+const ApplyLeave = () => {
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        leaveType: '',
+        startDate: '',
+        endDate: '',
+        reason: '',
+        document: null
+    });
+    const [errors, setErrors] = useState({});
 
-  return (
-    <>
-      <nav
-        className="navbar navbar-expand-lg "
-        style={{ backgroundColor: "rgb(0 77 255 / 65%)" }}
-      >
-        <div className="container mt-5">
-          <NavLink
-            className="navbar-brand"
-            style={{
-              fontSize: "25px",
-              color: "white",
-              letterSpacing: ".05125em",
-            }}
-            to="/"
-          >
-            Leave
-          </NavLink>
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const employeeId = user.id;
 
-          <div className=" mt-2 pt-2">
-            <nav aria-label="breadcrumb">
-              <ol className="breadcrumb">
-                <li className="breadcrumb-item">
-                  <NavLink to="/" className=" text-dark fw-semibold text-decoration-none">Home</NavLink>
-                </li>
-                <li className="breadcrumb-item active fw-semibold text-decoration-underline" aria-current="page">
-                  Leave
-                </li>
-                <li className="breadcrumb-item">
-                  <NavLink to="/leaveHistory" className=" text-dark fw-semibold text-decoration-none">LeaveHistory</NavLink>
-                </li>
-              </ol>
-            </nav>
-          </div>
+    const leaveTypes = [
+        { value: 'sick', label: 'Sick Leave', icon: '🏥' },
+        { value: 'casual', label: 'Casual Leave', icon: '☕' },
+        { value: 'annual', label: 'Annual Leave', icon: '🏖️' },
+        { value: 'maternity', label: 'Maternity Leave', icon: '👶' },
+        { value: 'paternity', label: 'Paternity Leave', icon: '👨‍👧' },
+        { value: 'unpaid', label: 'Unpaid Leave', icon: '📅' }
+    ];
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: '' }));
+        }
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 5 * 1024 * 1024) {
+                toast.error('File size should be less than 5MB');
+                return;
+            }
+            setFormData(prev => ({ ...prev, document: file }));
+        }
+    };
+
+    const validateForm = () => {
+        const newErrors = {};
+
+        if (!formData.leaveType) newErrors.leaveType = 'Leave type is required';
+        if (!formData.startDate) newErrors.startDate = 'Start date is required';
+        if (!formData.endDate) newErrors.endDate = 'End date is required';
+        if (!formData.reason.trim()) newErrors.reason = 'Reason is required';
+
+        if (formData.startDate && formData.endDate) {
+            if (new Date(formData.startDate) > new Date(formData.endDate)) {
+                newErrors.endDate = 'End date must be after start date';
+            }
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) {
+            toast.error('Please fill all required fields');
+            return;
+        }
+
+        if (!employeeId) {
+            toast.error('Employee ID not found. Please login again.');
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const token = localStorage.getItem('token');
+            const submitData = new FormData();
+
+            submitData.append('leaveType', formData.leaveType);
+            submitData.append('startDate', formData.startDate);
+            submitData.append('endDate', formData.endDate);
+            submitData.append('reason', formData.reason);
+            
+            if (formData.document) {
+                submitData.append('document', formData.document);
+            }
+
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/api/v1/leave/apply/${employeeId}`,
+                submitData,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            );
+
+            if (response.data.success) {
+                toast.success('✅ Leave application submitted successfully!');
+                setTimeout(() => {
+                    navigate('/leave-history');
+                }, 1500);
+            }
+        } catch (error) {
+            console.error('Error applying leave:', error);
+            toast.error(error.response?.data?.message || 'Error submitting leave application');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const calculateDays = () => {
+        if (formData.startDate && formData.endDate) {
+            const start = new Date(formData.startDate);
+            const end = new Date(formData.endDate);
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            return diffDays;
+        }
+        return 0;
+    };
+
+    return (
+        <div className="apply-leave-container">
+            <div className="apply-leave-header">
+                <button className="back-btn" onClick={() => navigate(-1)}>
+                    <i className="fa fa-arrow-left"></i>
+                </button>
+                <div>
+                    <h1>Apply for Leave</h1>
+                    <p>Submit your leave request</p>
+                </div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="apply-leave-form">
+                <div className="form-section">
+                    <h3><i className="fa fa-calendar"></i> Leave Details</h3>
+
+                    <div className="leave-type-grid">
+                        {leaveTypes.map(type => (
+                            <div
+                                key={type.value}
+                                className={`leave-type-card ${formData.leaveType === type.value ? 'selected' : ''}`}
+                                onClick={() => setFormData(prev => ({ ...prev, leaveType: type.value }))}
+                            >
+                                <span className="type-icon">{type.icon}</span>
+                                <span className="type-label">{type.label}</span>
+                            </div>
+                        ))}
+                    </div>
+                    {errors.leaveType && <span className="error-text">{errors.leaveType}</span>}
+
+                    <div className="form-grid">
+                        <div className="form-group">
+                            <label>Start Date <span className="required">*</span></label>
+                            <input
+                                type="date"
+                                name="startDate"
+                                value={formData.startDate}
+                                onChange={handleChange}
+                                min={new Date().toISOString().split('T')[0]}
+                                className={errors.startDate ? 'error' : ''}
+                            />
+                            {errors.startDate && <span className="error-text">{errors.startDate}</span>}
+                        </div>
+
+                        <div className="form-group">
+                            <label>End Date <span className="required">*</span></label>
+                            <input
+                                type="date"
+                                name="endDate"
+                                value={formData.endDate}
+                                onChange={handleChange}
+                                min={formData.startDate || new Date().toISOString().split('T')[0]}
+                                className={errors.endDate ? 'error' : ''}
+                            />
+                            {errors.endDate && <span className="error-text">{errors.endDate}</span>}
+                        </div>
+                    </div>
+
+                    {calculateDays() > 0 && (
+                        <div className="days-info">
+                            <i className="fa fa-info-circle"></i>
+                            <span>Total Days: <strong>{calculateDays()}</strong></span>
+                        </div>
+                    )}
+
+                    <div className="form-group">
+                        <label>Reason <span className="required">*</span></label>
+                        <textarea
+                            name="reason"
+                            value={formData.reason}
+                            onChange={handleChange}
+                            placeholder="Please provide a detailed reason for your leave..."
+                            rows="4"
+                            className={errors.reason ? 'error' : ''}
+                        />
+                        {errors.reason && <span className="error-text">{errors.reason}</span>}
+                    </div>
+
+                    <div className="form-group">
+                        <label>Supporting Document (Optional)</label>
+                        <div className="file-upload">
+                            <input
+                                type="file"
+                                id="document"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                onChange={handleFileChange}
+                                hidden
+                            />
+                            <label htmlFor="document" className="file-upload-btn">
+                                <i className="fa fa-upload"></i>
+                                {formData.document ? formData.document.name : 'Upload Document'}
+                            </label>
+                            {formData.document && (
+                                <button
+                                    type="button"
+                                    className="remove-file"
+                                    onClick={() => setFormData(prev => ({ ...prev, document: null }))}
+                                >
+                                    <i className="fa fa-times"></i>
+                                </button>
+                            )}
+                        </div>
+                        <small className="help-text">PDF, JPG, PNG (Max 5MB)</small>
+                    </div>
+                </div>
+
+                <div className="form-actions">
+                    <button
+                        type="button"
+                        className="btn-cancel"
+                        onClick={() => navigate(-1)}
+                    >
+                        <i className="fa fa-times"></i>
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="btn-submit"
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <>
+                                <span className="spinner"></span>
+                                Submitting...
+                            </>
+                        ) : (
+                            <>
+                                <i className="fa fa-paper-plane"></i>
+                                Submit Application
+                            </>
+                        )}
+                    </button>
+                </div>
+            </form>
         </div>
-      </nav>
-      <div className="container my-2 pt-3">
-        <h2>Leave Management</h2>
-      </div>
-      <div className=" mb-4 pt-3  extra-special">
-        <div className="row d-flex justify-content-evenly  " style={boxstyle}>
-          <h5 style={{ fontSize: "20px" }} className="px-2">
-            Apply Leave
-          </h5>
-          <hr />
-          <div className="col-sm-12 col-md-6 col-lg-6">
-            <div className="mb-3">
-              <b>Enter Your Employee ID</b>
-              <span style={{ color: "red" }}>*</span>
-              <input
-                type="text"
-                className="form-control"
-                id="user_id"
-                name="user_id"
-                placeholder="Employee ID"
-                style={{ border: "1px solid" }}
-              />
-            </div>
-            <div className="mb-3">
-              <b>Reason</b>
-              <span style={{ color: "red" }}>*</span>
-              <input
-                type="text"
-                className="form-control"
-                id="reason"
-                name="reason"
-                placeholder="Reason"
-                style={{ border: "1px solid" }}
-              />
-            </div>
-            <div className="mb-3">
-              <b>Leave From</b>
-              <span style={{ color: "red" }}>*</span>
-              <input
-                type="date"
-                className="form-control"
-                id="leave_startdate"
-                style={{ border: "1px solid" }}
-                name="leave_startdate"
-              />
-            </div>
-          </div>
-          <div className="col-sm-12 col-md-6 col-lg-6">
-            <div className="mb-3">
-              <b>Leave To</b>
-              <span style={{ color: "red" }}>*</span>
-              <input
-                type="date"
-                className="form-control"
-                id="leave_enddate"
-                name="leave_enddate"
-                style={{ border: "1px solid" }}
-              />
-            </div>
-            <div className="mb-3">
-              <b>Description(Brief)</b>
-              <span style={{ color: "red" }}>*</span>
-              <textarea
-                className="form-control"
-                placeholder="Description"
-                id="leave_description"
-                name="leave_description"
-                style={{ border: "1px solid" }}
-              />
-            </div>
-            <div className="mb-3">
-              <b>
-                Upload Supporting Documents (Optional, Except for Urgent Cases)
-              </b>
-              <input
-                type="file"
-                className="form-control"
-                id="leave_docx"
-                name="leave_docx"
-                accept="png/pdf"
-                style={{ border: "1px solid" }}
-              />
-            </div>
-            <button
-              type="submit"
-              className="btn btn-primary float-end"
-              id="applyleave"
-            >
-              Submit
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
+    );
+};
+
+export default ApplyLeave;

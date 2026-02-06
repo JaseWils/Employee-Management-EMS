@@ -1,73 +1,62 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import { SocketProvider } from './context/SocketContext';
+import { ThemeProvider } from './context/ThemeContext';
+import './styles/dark-mode-complete.css';
 
 // Layout Components
 import ModernSidebar from './components/Navigation/ModernSidebar';
 import TopNavBar from './components/Navigation/TopNavBar';
 
-// Dashboard
-import ModernDashboard from './components/Dashboard/ModernDashboard';
-
-// Authentication
+// Pages
 import Login from './components/Authentication/Login';
-import SignUp from './components/Authentication/SignUp';
-import VerifyOTP from './components/Authentication/VerifyOTP';
-
-// Employee Management
+import ModernDashboard from './components/Dashboard/ModernDashboard';
 import AddStaff from './components/Staff/AddStaff';
 import EmployeeList from './components/Staff/EmployeeList';
-import ManageStaff from './components/Staff/ManageStaff';
-
-// Department
-import AddDepartment from './components/Department/AddDepartment';
-import ManageDepartment from './components/Department/ManageDepartment';
-
-// Attendance
 import AttendanceTracker from './components/Attendance/AttendanceTracker';
-
-// Leave Management
+import AttendanceRecords from './components/Attendance/AttendanceRecords';
+import AttendanceReports from './components/Attendance/AttendanceReports';
 import ApplyLeave from './components/Leave/ApplyLeave';
+import LeaveRequests from './components/Leave/LeaveRequests';
 import LeaveHistory from './components/Leave/LeaveHistory';
-import StaffLeave from './components/Leave/StaffLeave';
-
-// Salary & Payroll
-import AddSalary from './components/Salary/AddSalary';
 import ManageSalary from './components/Salary/ManageSalary';
-import YourSalary from './components/Salary/YourSalary';
-
-// Tasks
+import PayrollProcess from './components/Payroll/PayrollProcess';
+import Payslips from './components/Payroll/Payslips';
 import TaskBoard from './components/Tasks/TaskBoard';
-
-// Documents
 import DocumentList from './components/Documents/DocumentList';
-import DocumentUpload from './components/Documents/DocumentUpload';
-
-// Analytics
+import Performance from './components/Performance/Performance';
 import AnalyticsDashboard from './components/Analytics/AnalyticsDashboard';
-
-// Admin
-import AddAdmin from './components/Admin/AddAdmin';
-import ManageAdmin from './components/Admin/ManageAdmin';
+import Settings from './components/Settings/Settings';
+import DepartmentManagement from './components/Departments/DepartmentManagement';
 
 import './App.css';
 
+// Protected Route Component
 const ProtectedRoute = ({ children }) => {
     const token = localStorage.getItem('token');
-    return token ? children : <Navigate to="/login" />;
+    if (!token) {
+        return <Navigate to="/login" />;
+    }
+    return children;
 };
 
+// Main Layout Component
 const MainLayout = ({ children }) => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+    const toggleSidebar = () => {
+        setSidebarOpen(!sidebarOpen);
+    };
 
     return (
         <div className="app-container">
             <ModernSidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
             <div className="main-content">
                 <TopNavBar toggleSidebar={toggleSidebar} />
-                <div className="content-wrapper">{children}</div>
+                <div className="content-wrapper">
+                    {children}
+                </div>
             </div>
         </div>
     );
@@ -76,34 +65,145 @@ const MainLayout = ({ children }) => {
 function App() {
     return (
         <Router>
-            <SocketProvider>
-                <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
-                <Routes>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<SignUp />} />
-                    <Route path="/verify-otp" element={<VerifyOTP />} />
-                    <Route path="/" element={<ProtectedRoute><MainLayout><ModernDashboard /></MainLayout></ProtectedRoute>} />
-                    <Route path="/employees" element={<ProtectedRoute><MainLayout><EmployeeList /></MainLayout></ProtectedRoute>} />
-                    <Route path="/add-employee" element={<ProtectedRoute><MainLayout><AddStaff /></MainLayout></ProtectedRoute>} />
-                    <Route path="/manage-staff" element={<ProtectedRoute><MainLayout><ManageStaff /></MainLayout></ProtectedRoute>} />
-                    <Route path="/departments" element={<ProtectedRoute><MainLayout><ManageDepartment /></MainLayout></ProtectedRoute>} />
-                    <Route path="/add-department" element={<ProtectedRoute><MainLayout><AddDepartment /></MainLayout></ProtectedRoute>} />
-                    <Route path="/attendance" element={<ProtectedRoute><MainLayout><AttendanceTracker employeeId={localStorage.getItem('employeeId')} /></MainLayout></ProtectedRoute>} />
-                    <Route path="/apply-leave" element={<ProtectedRoute><MainLayout><ApplyLeave /></MainLayout></ProtectedRoute>} />
-                    <Route path="/leave-history" element={<ProtectedRoute><MainLayout><LeaveHistory /></MainLayout></ProtectedRoute>} />
-                    <Route path="/leave-requests" element={<ProtectedRoute><MainLayout><StaffLeave /></MainLayout></ProtectedRoute>} />
-                    <Route path="/salary" element={<ProtectedRoute><MainLayout><ManageSalary /></MainLayout></ProtectedRoute>} />
-                    <Route path="/your-salary" element={<ProtectedRoute><MainLayout><YourSalary /></MainLayout></ProtectedRoute>} />
-                    <Route path="/add-salary" element={<ProtectedRoute><MainLayout><AddSalary /></MainLayout></ProtectedRoute>} />
-                    <Route path="/tasks" element={<ProtectedRoute><MainLayout><TaskBoard userId={localStorage.getItem('userId')} /></MainLayout></ProtectedRoute>} />
-                    <Route path="/documents" element={<ProtectedRoute><MainLayout><DocumentList /></MainLayout></ProtectedRoute>} />
-                    <Route path="/upload-document" element={<ProtectedRoute><MainLayout><DocumentUpload employeeId={localStorage.getItem('employeeId')} /></MainLayout></ProtectedRoute>} />
-                    <Route path="/analytics" element={<ProtectedRoute><MainLayout><AnalyticsDashboard /></MainLayout></ProtectedRoute>} />
-                    <Route path="/add-admin" element={<ProtectedRoute><MainLayout><AddAdmin /></MainLayout></ProtectedRoute>} />
-                    <Route path="/manage-admin" element={<ProtectedRoute><MainLayout><ManageAdmin /></MainLayout></ProtectedRoute>} />
-                    <Route path="*" element={<Navigate to="/" />} />
-                </Routes>
-            </SocketProvider>
+            <ThemeProvider>
+                <SocketProvider>
+                    <Toaster
+                        position="top-right"
+                        toastOptions={{
+                            duration: 4000,
+                            style: {
+                                background: '#fff',
+                                color: '#1a202c',
+                                borderRadius: '12px',
+                                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
+                                padding: '16px',
+                            },
+                            success: {
+                                iconTheme: {
+                                    primary: '#48bb78',
+                                    secondary: '#fff',
+                                }
+                            },
+                            error: {
+                                iconTheme: {
+                                    primary: '#f56565',
+                                    secondary: '#fff',
+                                }
+                            }
+                        }}
+                    />
+
+                    <Routes>
+                        {/* Public Routes */}
+                        <Route path="/login" element={<Login />} />
+
+                        {/* Protected Routes */}
+                        <Route path="/" element={
+                            <ProtectedRoute>
+                                <MainLayout><ModernDashboard /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+
+                        {/* Employee Routes */}
+                        <Route path="/employees" element={
+                            <ProtectedRoute>
+                                <MainLayout><EmployeeList /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/add-employee" element={
+                            <ProtectedRoute>
+                                <MainLayout><AddStaff /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/departments" element={
+                            <ProtectedRoute>
+                                <MainLayout><DepartmentManagement /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+
+                        {/* Attendance Routes */}
+                        <Route path="/attendance" element={
+                            <ProtectedRoute>
+                                <MainLayout><AttendanceTracker /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/attendance-records" element={
+                            <ProtectedRoute>
+                                <MainLayout><AttendanceRecords /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/attendance-reports" element={
+                            <ProtectedRoute>
+                                <MainLayout><AttendanceReports /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+
+                        {/* Leave Routes */}
+                        <Route path="/apply-leave" element={
+                            <ProtectedRoute>
+                                <MainLayout><ApplyLeave /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/leave-requests" element={
+                            <ProtectedRoute>
+                                <MainLayout><LeaveRequests /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/leave-history" element={
+                            <ProtectedRoute>
+                                <MainLayout><LeaveHistory /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+
+                        {/* Payroll Routes */}
+                        <Route path="/salary" element={
+                            <ProtectedRoute>
+                                <MainLayout><ManageSalary /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/payroll-process" element={
+                            <ProtectedRoute>
+                                <MainLayout><PayrollProcess /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/payslips" element={
+                            <ProtectedRoute>
+                                <MainLayout><Payslips /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+
+                        {/* Other Routes */}
+                        <Route path="/tasks" element={
+                            <ProtectedRoute>
+                                <MainLayout><TaskBoard /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/documents" element={
+                            <ProtectedRoute>
+                                <MainLayout><DocumentList /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/performance" element={
+                            <ProtectedRoute>
+                                <MainLayout><Performance /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/analytics" element={
+                            <ProtectedRoute>
+                                <MainLayout><AnalyticsDashboard /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/settings" element={
+                            <ProtectedRoute>
+                                <MainLayout><Settings /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+
+                        {/* Catch all */}
+                        <Route path="*" element={<Navigate to="/" />} />
+                    </Routes>
+                </SocketProvider>
+            </ThemeProvider>
         </Router>
     );
 }

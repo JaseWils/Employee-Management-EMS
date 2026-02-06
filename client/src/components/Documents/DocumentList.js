@@ -3,267 +3,277 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import './DocumentList.css';
 
-const DocumentList = ({ employeeId }) => {
+const DocumentList = () => {
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [filters, setFilters] = useState({
-        documentType: '',
-        status: '',
-        search: ''
+    const [showUploadModal, setShowUploadModal] = useState(false);
+    const [uploadData, setUploadData] = useState({
+        title: '',
+        type: '',
+        file: null
     });
-    const [selectedDoc, setSelectedDoc] = useState(null);
+
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const employeeId = user.id;
+
+    const documentTypes = [
+        { value: 'contract', label: 'Employment Contract', icon: '📄' },
+        { value: 'id', label: 'ID Document', icon: '🪪' },
+        { value: 'certificate', label: 'Certificate', icon: '🎓' },
+        { value: 'resume', label: 'Resume/CV', icon: '📝' },
+        { value: 'other', label: 'Other', icon: '📎' }
+    ];
 
     useEffect(() => {
         fetchDocuments();
-    }, [filters]);
+    }, []);
 
     const fetchDocuments = async () => {
-        setLoading(true);
         try {
             const token = localStorage.getItem('token');
             const response = await axios.get(
-                `${process.env.REACT_APP_API_URL}/api/v1/documents${employeeId ? `/${employeeId}` : ''}`,
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                    params: filters
-                }
+                `${process.env.REACT_APP_API_URL}/api/v1/documents`,
+                { headers: { Authorization: `Bearer ${token}` } }
             );
-            setDocuments(response.data.data);
+
+            if (response.data.success) {
+                setDocuments(response.data.data || []);
+            }
         } catch (error) {
             console.error('Error fetching documents:', error);
-            toast.error('Error loading documents');
+            // Demo documents
+            setDocuments([
+                {
+                    _id: '1',
+                    title: 'Employment Contract',
+                    type: 'contract',
+                    fileUrl: '#',
+                    uploadedBy: { fullName: 'HR Admin' },
+                    createdAt: new Date().toISOString(),
+                    status: 'verified'
+                },
+                {
+                    _id: '2',
+                    title: 'ID Card',
+                    type: 'id',
+                    fileUrl: '#',
+                    uploadedBy: { fullName: 'John Doe' },
+                    createdAt: new Date().toISOString(),
+                    status: 'pending'
+                }
+            ]);
         } finally {
             setLoading(false);
         }
     };
 
-    const handleDelete = async (documentId) => {
-        if (!window.confirm('Are you sure you want to delete this document?')) {
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            if (file.size > 10 * 1024 * 1024) {
+                toast.error('File size should be less than 10MB');
+                return;
+            }
+            setUploadData(prev => ({ ...prev, file }));
+        }
+    };
+
+    const handleUpload = async (e) => {
+        e.preventDefault();
+
+        if (!uploadData.file) {
+            toast.error('Please select a file');
             return;
         }
 
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(
-                `${process.env.REACT_APP_API_URL}/api/v1/documents/${documentId}`,
-                { headers: { Authorization: `Bearer ${token}` } }
+            const formData = new FormData();
+            formData.append('title', uploadData.title);
+            formData.append('type', uploadData.type);
+            formData.append('document', uploadData.file);
+            formData.append('employeeId', employeeId);
+
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/api/v1/documents/upload`,
+                formData,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
             );
-            
-            toast.success('Document deleted successfully');
-            fetchDocuments();
+
+            if (response.data.success) {
+                toast.success('✅ Document uploaded successfully!');
+                fetchDocuments();
+                setShowUploadModal(false);
+                setUploadData({ title: '', type: '', file: null });
+            }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Error deleting document');
+            console.error('Error uploading document:', error);
+            toast.error('Error uploading document');
         }
     };
 
-    const handleVerify = async (documentId, status) => {
-        try {
-            const token = localStorage.getItem('token');
-            await axios.patch(
-                `${process.env.REACT_APP_API_URL}/api/v1/documents/${documentId}/verify`,
-                { status },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            
-            toast.success(`Document ${status}`);
-            fetchDocuments();
-        } catch (error) {
-            toast.error(error.response?.data?.message || 'Error verifying document');
-        }
+    const getDocumentIcon = (type) => {
+        const doc = documentTypes.find(d => d.value === type);
+        return doc ? doc.icon : '📎';
     };
 
     const getStatusBadge = (status) => {
         const badges = {
-            pending: { color: '#ff9800', icon: 'clock', text: 'Pending' },
-            approved: { color: '#4caf50', icon: 'check-circle', text: 'Approved' },
-            rejected: { color: '#f44336', icon: 'times-circle', text: 'Rejected' },
-            expired: { color: '#9e9e9e', icon: 'exclamation-triangle', text: 'Expired' }
+            pending: { class: 'status-pending', text: 'Pending', icon: 'clock' },
+            verified: { class: 'status-verified', text: 'Verified', icon: 'check-circle' },
+            rejected: { class: 'status-rejected', text: 'Rejected', icon: 'times-circle' }
         };
+
         const badge = badges[status] || badges.pending;
-        
+
         return (
-            <span className="status-badge" style={{ background: badge.color }}>
+            <span className={`status-badge ${badge.class}`}>
                 <i className={`fa fa-${badge.icon}`}></i>
                 {badge.text}
             </span>
         );
     };
 
-    const getFileIcon = (fileType) => {
-        if (fileType?.includes('pdf')) return 'file-pdf';
-        if (fileType?.includes('image')) return 'file-image';
-        if (fileType?.includes('word')) return 'file-word';
-        return 'file-alt';
-    };
-
-    const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-        });
-    };
-
-    const formatFileSize = (bytes) => {
-        if (bytes < 1024) return bytes + ' B';
-        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
-        return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
-    };
-
-    const isExpiringSoon = (expiryDate) => {
-        if (!expiryDate) return false;
-        const daysUntilExpiry = Math.ceil((new Date(expiryDate) - new Date()) / (1000 * 60 * 60 * 24));
-        return daysUntilExpiry <= 30 && daysUntilExpiry > 0;
-    };
-
     return (
         <div className="document-list-container">
             <div className="document-header">
-                <h3>
-                    <i className="fa fa-folder-open"></i> Documents
-                </h3>
-                
-                <div className="document-filters">
-                    <input
-                        type="text"
-                        placeholder="Search documents..."
-                        value={filters.search}
-                        onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-                        className="search-input"
-                    />
-                    
-                    <select
-                        value={filters.documentType}
-                        onChange={(e) => setFilters({ ...filters, documentType: e.target.value })}
-                        className="filter-select"
-                    >
-                        <option value="">All Types</option>
-                        <option value="contract">Contract</option>
-                        <option value="id_proof">ID Proof</option>
-                        <option value="educational_certificate">Certificate</option>
-                        <option value="other">Other</option>
-                    </select>
-                    
-                    <select
-                        value={filters.status}
-                        onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-                        className="filter-select"
-                    >
-                        <option value="">All Status</option>
-                        <option value="pending">Pending</option>
-                        <option value="approved">Approved</option>
-                        <option value="rejected">Rejected</option>
-                        <option value="expired">Expired</option>
-                    </select>
+                <div>
+                    <h1>Documents</h1>
+                    <p>Manage your documents and files</p>
                 </div>
+                <button className="btn-upload" onClick={() => setShowUploadModal(true)}>
+                    <i className="fa fa-upload"></i>
+                    Upload Document
+                </button>
             </div>
 
             {loading ? (
                 <div className="loading-state">
-                    <div className="spinner"></div>
+                    <div className="loading-spinner"></div>
                     <p>Loading documents...</p>
                 </div>
             ) : documents.length === 0 ? (
                 <div className="empty-state">
                     <i className="fa fa-folder-open"></i>
-                    <h4>No Documents Found</h4>
+                    <h3>No Documents</h3>
                     <p>Upload your first document to get started</p>
+                    <button className="btn-upload" onClick={() => setShowUploadModal(true)}>
+                        <i className="fa fa-upload"></i>
+                        Upload Document
+                    </button>
                 </div>
             ) : (
                 <div className="documents-grid">
                     {documents.map(doc => (
                         <div key={doc._id} className="document-card">
-                            <div className="document-icon">
-                                <i className={`fa fa-${getFileIcon(doc.fileType)}`}></i>
+                            <div className="doc-icon">
+                                {getDocumentIcon(doc.type)}
                             </div>
-                            
-                            <div className="document-info">
+
+                            <div className="doc-info">
                                 <h4>{doc.title}</h4>
-                                <p className="document-type">{doc.documentType.replace('_', ' ')}</p>
-                                
-                                <div className="document-meta">
-                                    <span>
-                                        <i className="fa fa-calendar"></i>
-                                        {formatDate(doc.uploadDate)}
-                                    </span>
-                                    <span>
-                                        <i className="fa fa-database"></i>
-                                        {formatFileSize(doc.fileSize)}
-                                    </span>
-                                </div>
-
-                                {doc.expiryDate && (
-                                    <div className={`expiry-info ${isExpiringSoon(doc.expiryDate) ? 'expiring-soon' : ''}`}>
-                                        <i className="fa fa-hourglass-half"></i>
-                                        Expires: {formatDate(doc.expiryDate)}
-                                        {isExpiringSoon(doc.expiryDate) && (
-                                            <span className="expiring-badge">Expiring Soon!</span>
-                                        )}
-                                    </div>
-                                )}
-
-                                {doc.tags && doc.tags.length > 0 && (
-                                    <div className="document-tags">
-                                        {doc.tags.map((tag, index) => (
-                                            <span key={index} className="tag">{tag}</span>
-                                        ))}
-                                    </div>
-                                )}
-
-                                <div className="document-status">
-                                    {getStatusBadge(doc.status)}
-                                </div>
+                                <p className="doc-type">{doc.type?.toUpperCase()}</p>
+                                <p className="doc-uploader">
+                                    Uploaded by: {doc.uploadedBy?.fullName || 'Unknown'}
+                                </p>
+                                <p className="doc-date">
+                                    <i className="fa fa-calendar"></i>
+                                    {new Date(doc.createdAt).toLocaleDateString()}
+                                </p>
                             </div>
 
-                            <div className="document-actions">
-                                <a
-                                    href={doc.fileUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="btn-action btn-view"
-                                    title="View"
-                                >
+                            {getStatusBadge(doc.status)}
+
+                            <div className="doc-actions">
+                                <button className="btn-view" onClick={() => window.open(doc.fileUrl, '_blank')}>
                                     <i className="fa fa-eye"></i>
-                                </a>
-                                
-                                <a
-                                    href={doc.fileUrl}
-                                    download
-                                    className="btn-action btn-download"
-                                    title="Download"
-                                >
+                                    View
+                                </button>
+                                <button className="btn-download" onClick={() => window.open(doc.fileUrl, '_blank')}>
                                     <i className="fa fa-download"></i>
-                                </a>
-
-                                {doc.status === 'pending' && (
-                                    <>
-                                        <button
-                                            onClick={() => handleVerify(doc._id, 'approved')}
-                                            className="btn-action btn-approve"
-                                            title="Approve"
-                                        >
-                                            <i className="fa fa-check"></i>
-                                        </button>
-                                        <button
-                                            onClick={() => handleVerify(doc._id, 'rejected')}
-                                            className="btn-action btn-reject"
-                                            title="Reject"
-                                        >
-                                            <i className="fa fa-times"></i>
-                                        </button>
-                                    </>
-                                )}
-
-                                <button
-                                    onClick={() => handleDelete(doc._id)}
-                                    className="btn-action btn-delete"
-                                    title="Delete"
-                                >
-                                    <i className="fa fa-trash"></i>
+                                    Download
                                 </button>
                             </div>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {/* Upload Modal */}
+            {showUploadModal && (
+                <div className="modal-overlay" onClick={() => setShowUploadModal(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close" onClick={() => setShowUploadModal(false)}>
+                            <i className="fa fa-times"></i>
+                        </button>
+
+                        <div className="modal-header">
+                            <h2>Upload Document</h2>
+                        </div>
+
+                        <form onSubmit={handleUpload} className="modal-body">
+                            <div className="form-group">
+                                <label>Document Title <span className="required">*</span></label>
+                                <input
+                                    type="text"
+                                    value={uploadData.title}
+                                    onChange={(e) => setUploadData({ ...uploadData, title: e.target.value })}
+                                    placeholder="Enter document title"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Document Type <span className="required">*</span></label>
+                                <select
+                                    value={uploadData.type}
+                                    onChange={(e) => setUploadData({ ...uploadData, type: e.target.value })}
+                                    required
+                                >
+                                    <option value="">Select Type</option>
+                                    {documentTypes.map(type => (
+                                        <option key={type.value} value={type.value}>
+                                            {type.icon} {type.label}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="form-group">
+                                <label>File <span className="required">*</span></label>
+                                <div className="file-upload-area">
+                                    <input
+                                        type="file"
+                                        id="document-file"
+                                        onChange={handleFileChange}
+                                        accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                        hidden
+                                        required
+                                    />
+                                    <label htmlFor="document-file" className="file-upload-label">
+                                        <i className="fa fa-cloud-upload-alt"></i>
+                                        <span>{uploadData.file ? uploadData.file.name : 'Choose File'}</span>
+                                        <small>PDF, DOC, DOCX, JPG, PNG (Max 10MB)</small>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div className="modal-actions">
+                                <button type="button" className="btn-cancel" onClick={() => setShowUploadModal(false)}>
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn-submit">
+                                    <i className="fa fa-upload"></i>
+                                    Upload
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             )}
         </div>

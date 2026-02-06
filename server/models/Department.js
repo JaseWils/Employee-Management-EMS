@@ -3,16 +3,6 @@ const mongoose = require('mongoose');
 const departmentSchema = new mongoose.Schema({
     name: {
         type: String,
-<<<<<<< HEAD
-        required: true,
-        unique: true,
-        trim: true
-    },
-    description: String,
-    head: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Staff'
-=======
         required: [true, 'Department name is required'],
         unique: true,
         trim: true,
@@ -25,12 +15,11 @@ const departmentSchema = new mongoose.Schema({
     },
     head: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Staff'
     },
     employeeCount: {
         type: Number,
         default: 0
->>>>>>> 2b6bd551d067825577aa0957dbf4462a2172534d
     },
     isActive: {
         type: Boolean,
