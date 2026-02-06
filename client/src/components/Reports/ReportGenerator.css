@@ -1,0 +1,187 @@
+.report-generator {
+    padding: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.generator-header {
+    margin-bottom: 32px;
+}
+
+.generator-header h2 {
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a202c;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.generator-header p {
+    margin: 0;
+    color: #718096;
+}
+
+.report-config {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.config-section {
+    margin-bottom: 32px;
+}
+
+.config-section:last-child {
+    margin-bottom: 0;
+}
+
+.config-section h3 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a202c;
+}
+
+.report-types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+.report-type-card {
+    padding: 24px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.report-type-card:hover {
+    border-color: #667eea;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
+}
+
+.report-type-card.selected {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.report-type-card i {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.report-type-card span {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.date-range-inputs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.date-input label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.date-input input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.date-input input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.export-buttons {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.export-btn {
+    flex: 1;
+    min-width: 180px;
+    padding: 16px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s;
+    color: white;
+}
+
+.export-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.export-btn:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.export-btn.pdf {
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+}
+
+.export-btn.excel {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+}
+
+.export-btn.csv {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+}
+
+.export-btn i {
+    font-size: 18px;
+}
+
+@media (max-width: 768px) {
+    .report-generator {
+        padding: 16px;
+    }
+
+    .report-config {
+        padding: 20px;
+    }
+
+    .report-types-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .date-range-inputs {
+        grid-template-columns: 1fr;
+    }
+
+    .export-buttons {
+        flex-direction: column;
+    }
+
+    .export-btn {
+        min-width: 100%;
+    }
+}

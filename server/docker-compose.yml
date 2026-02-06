@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: ems-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: employee-management
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - ems-network
+
+  server:
+    build: ./server
+    container_name: ems-server
+    restart: unless-stopped
+    ports:
+      - "5800:5800"
+    environment:
+      NODE_ENV: production
+      MONGODB_URL: mongodb://admin:password123@mongodb:27017/employee-management?authSource=admin
+      JWT_SECRET: ${JWT_SECRET}
+      CLIENT_URL: http://localhost:3000
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+    depends_on:
+      - mongodb
+    networks:
+      - ems-network
+
+  client:
+    build: ./client
+    container_name: ems-client
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    environment:
+      REACT_APP_API_URL: http://localhost:5800
+    depends_on:
+      - server
+    networks:
+      - ems-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  ems-network:
+    driver: bridge

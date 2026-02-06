@@ -1,0 +1,1731 @@
+/* Dark Mode Variables */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #f7fafc;
+    --bg-card: #ffffff;
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-tertiary: #718096;
+    --text-muted: #a0aec0;
+    --border-color: #e2e8f0;
+    --border-light: #edf2f7;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.1);
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --input-bg: #ffffff;
+    --table-header-bg: #f7fafc;
+    --table-row-hover: #f7fafc;
+    --sidebar-bg: #1a202c;
+    --navbar-bg: #ffffff;
+    --dropdown-bg: #ffffff;
+    --accent-color: #667eea;
+    --success-color: #48bb78;
+    --warning-color: #ed8936;
+    --danger-color: #f56565;
+    --info-color: #4299e1;
+}
+
+.dark-mode {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-card: #1e293b;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-tertiary: #94a3b8;
+    --text-muted: #64748b;
+    --border-color: #334155;
+    --border-light: #475569;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.6);
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --input-bg: #1e293b;
+    --table-header-bg: #334155;
+    --table-row-hover: #334155;
+    --sidebar-bg: #0f172a;
+    --navbar-bg: #1e293b;
+    --dropdown-bg: #1e293b;
+    --accent-color: #818cf8;
+    --success-color: #4ade80;
+    --warning-color: #fb923c;
+    --danger-color: #f87171;
+    --info-color: #38bdf8;
+}
+
+/* ==========================================
+   BOOTSTRAP OVERRIDES FOR DARK MODE
+   ========================================== */
+.dark-mode .text-dark {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .bg-white {
+    background-color: var(--bg-card) !important;
+}
+
+.dark-mode .bg-light {
+    background-color: var(--bg-secondary) !important;
+}
+
+.dark-mode .text-muted {
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .border-dark,
+.dark-mode .border-black {
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .border-bottom {
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .table {
+    color: var(--text-primary) !important;
+    background-color: var(--bg-card) !important;
+}
+
+.dark-mode .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .table-striped > tbody > tr:nth-of-type(even) {
+    background-color: var(--bg-card) !important;
+}
+
+.dark-mode .table-bordered {
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .table-bordered td,
+.dark-mode .table-bordered th {
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .table thead {
+    background-color: var(--bg-tertiary) !important;
+}
+
+.dark-mode .table thead th {
+    color: var(--text-primary) !important;
+    background-color: var(--bg-tertiary) !important;
+}
+
+.dark-mode .form-control {
+    background-color: var(--input-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .form-control:focus {
+    background-color: var(--input-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2) !important;
+}
+
+.dark-mode .form-select {
+    background-color: var(--input-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .breadcrumb {
+    background-color: transparent !important;
+}
+
+.dark-mode .breadcrumb-item a {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .breadcrumb-item.active {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .shadow {
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .card {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .card-header {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .card-body {
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .list-group-item {
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .extra-special,
+.dark-mode .extra-special2,
+.dark-mode .extra-special3 {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .rounded-top,
+.dark-mode .rounded-bottom,
+.dark-mode .rounded-1,
+.dark-mode .rounded {
+    border-color: var(--border-color) !important;
+}
+
+/* Global Dark Mode Styles */
+.dark-mode,
+.dark-mode body {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Main Containers */
+.dark-mode .app-container,
+.dark-mode .main-content,
+.dark-mode .content-wrapper,
+.dark-mode .modern-dashboard,
+.dark-mode .employee-list-container,
+.dark-mode .add-employee-container,
+.dark-mode .analytics-dashboard,
+.dark-mode .task-board,
+.dark-mode .document-container,
+.dark-mode .leave-container,
+.dark-mode .salary-container,
+.dark-mode .attendance-container {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Cards and Panels */
+.dark-mode .stat-card,
+.dark-mode .employee-card,
+.dark-mode .chart-card,
+.dark-mode .chart-container,
+.dark-mode .employee-form,
+.dark-mode .modal-content,
+.dark-mode .card,
+.dark-mode .panel,
+.dark-mode .widget,
+.dark-mode .stats-overview .stat-card,
+.dark-mode .action-card,
+.dark-mode .metric-card,
+.dark-mode .performance-section,
+.dark-mode .quick-actions,
+.dark-mode .recent-activity {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+/* Navigation - Sidebar */
+.dark-mode .modern-sidebar {
+    background: var(--sidebar-bg) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .modern-sidebar .sidebar-header,
+.dark-mode .modern-sidebar .user-profile-card {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .modern-sidebar .menu-item,
+.dark-mode .modern-sidebar .nav-link {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .modern-sidebar .menu-item:hover,
+.dark-mode .modern-sidebar .nav-link:hover,
+.dark-mode .modern-sidebar .menu-item.active {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .modern-sidebar .submenu {
+    background: var(--bg-secondary) !important;
+}
+
+.dark-mode .modern-sidebar .submenu-item {
+    color: var(--text-tertiary) !important;
+}
+
+.dark-mode .modern-sidebar .submenu-item:hover {
+    color: var(--text-primary) !important;
+    background: var(--bg-tertiary) !important;
+}
+
+/* Navigation - Top Navbar */
+.dark-mode .top-navbar {
+    background: var(--navbar-bg) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .top-navbar .search-bar input {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .top-navbar .search-bar input::placeholder {
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .top-navbar .topnav-icon {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .top-navbar .topnav-icon:hover {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .user-menu-trigger {
+    color: var(--text-primary) !important;
+}
+
+/* Dropdowns */
+.dark-mode .user-dropdown,
+.dark-mode .notification-dropdown,
+.dark-mode .dropdown-menu {
+    background: var(--dropdown-bg) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark-mode .user-dropdown a,
+.dark-mode .notification-dropdown a,
+.dark-mode .dropdown-item {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .user-dropdown a:hover,
+.dark-mode .notification-dropdown a:hover,
+.dark-mode .dropdown-item:hover {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .user-dropdown-header {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .notification-item {
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .notification-item:hover {
+    background: var(--bg-tertiary) !important;
+}
+
+/* Headings and Text */
+.dark-mode h1, 
+.dark-mode h2, 
+.dark-mode h3, 
+.dark-mode h4, 
+.dark-mode h5, 
+.dark-mode h6 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode p {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode span:not(.badge):not(.icon-badge) {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode label {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode a:not(.btn):not([class*="btn-"]) {
+    color: var(--accent-color) !important;
+}
+
+/* Form Elements */
+.dark-mode input:not([type="checkbox"]):not([type="radio"]),
+.dark-mode select,
+.dark-mode textarea {
+    background: var(--input-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode input:focus,
+.dark-mode select:focus,
+.dark-mode textarea:focus {
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2) !important;
+}
+
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder {
+    color: var(--text-muted) !important;
+}
+
+.dark-mode input:disabled,
+.dark-mode select:disabled,
+.dark-mode textarea:disabled {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-muted) !important;
+}
+
+/* Tables */
+.dark-mode table,
+.dark-mode .employees-table,
+.dark-mode .data-table {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark-mode thead,
+.dark-mode .employees-table thead,
+.dark-mode th {
+    background: var(--table-header-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode tbody tr {
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode tbody tr:hover {
+    background: var(--table-row-hover) !important;
+}
+
+.dark-mode td {
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Buttons */
+.dark-mode .btn-secondary,
+.dark-mode .btn-outline {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .btn-secondary:hover,
+.dark-mode .btn-outline:hover {
+    background: var(--border-light) !important;
+}
+
+.dark-mode .logout-btn {
+    color: var(--danger-color) !important;
+}
+
+/* Search and Filters */
+.dark-mode .search-box input,
+.dark-mode .filter-select,
+.dark-mode .search-bar {
+    background: var(--input-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .search-box input::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* Dashboard Specific */
+.dark-mode .modern-dashboard {
+    background: var(--bg-primary) !important;
+}
+
+.dark-mode .dashboard-header {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark-mode .greeting-section h1 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.dark-mode .greeting-section p,
+.dark-mode .greeting-section .subtitle {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.dark-mode .header-content .subtitle {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.dark-mode .dashboard-header .btn-primary {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #4f46e5 !important;
+}
+
+.dark-mode .dashboard-header .btn-primary:hover {
+    background: #ffffff !important;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark-mode .dashboard-header .btn-secondary {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+}
+
+.dark-mode .dashboard-header .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Stats Grid Cards */
+.dark-mode .stats-grid {
+    background: transparent !important;
+}
+
+.dark-mode .stat-content h3 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .stat-content p {
+    color: var(--text-tertiary) !important;
+}
+
+.dark-mode .stat-footer {
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .chart-header h3 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .chart-actions button {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .chart-actions button.active {
+    background: var(--accent-color) !important;
+    color: #ffffff !important;
+}
+
+/* Activity & Lists */
+.dark-mode .activity-item,
+.dark-mode .list-item {
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .activity-content p,
+.dark-mode .activity-time {
+    color: var(--text-secondary) !important;
+}
+
+/* Modals */
+.dark-mode .modal-overlay {
+    background: rgba(0, 0, 0, 0.7) !important;
+}
+
+.dark-mode .modal-header {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .modal-body {
+    background: var(--bg-card) !important;
+}
+
+.dark-mode .modal-footer {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Progress Bars */
+.dark-mode .progress-bar {
+    background: var(--bg-tertiary) !important;
+}
+
+/* Badges */
+.dark-mode .badge {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Scrollbar - Dark Mode */
+.dark-mode ::-webkit-scrollbar-track {
+    background: var(--bg-secondary) !important;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+    background: var(--bg-tertiary) !important;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: var(--border-light) !important;
+}
+
+/* Charts - Improve visibility */
+.dark-mode .chart-wrapper canvas {
+    filter: brightness(1.1);
+}
+
+/* Tooltips */
+.dark-mode [data-tooltip]:before {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Loading States */
+.dark-mode .loading-spinner {
+    border-color: var(--bg-tertiary) !important;
+    border-top-color: var(--accent-color) !important;
+}
+
+/* Empty States */
+.dark-mode .empty-state,
+.dark-mode .no-data {
+    color: var(--text-muted) !important;
+}
+
+/* Separators / Dividers */
+.dark-mode hr {
+    border-color: var(--border-color) !important;
+}
+
+/* Icons in dark mode */
+.dark-mode .fa,
+.dark-mode .fas,
+.dark-mode .far,
+.dark-mode .fab {
+    color: inherit;
+}
+
+/* Keyboard shortcuts */
+.dark-mode .keyboard-shortcut {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-muted) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Form summaries and info boxes */
+.dark-mode .form-summary,
+.dark-mode .info-box,
+.dark-mode .alert {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Stat gradient cards - keep gradients visible */
+.dark-mode .stat-card.gradient-blue,
+.dark-mode .stat-card.gradient-green,
+.dark-mode .stat-card.gradient-orange,
+.dark-mode .stat-card.gradient-purple,
+.dark-mode .stat-card.gradient-red,
+.dark-mode .stat-card.gradient-cyan {
+    color: #ffffff !important;
+}
+
+.dark-mode .stat-card.gradient-blue h3,
+.dark-mode .stat-card.gradient-green h3,
+.dark-mode .stat-card.gradient-orange h3,
+.dark-mode .stat-card.gradient-purple h3,
+.dark-mode .stat-card.gradient-red h3,
+.dark-mode .stat-card.gradient-cyan h3,
+.dark-mode .stat-card.gradient-blue p,
+.dark-mode .stat-card.gradient-green p,
+.dark-mode .stat-card.gradient-orange p,
+.dark-mode .stat-card.gradient-purple p,
+.dark-mode .stat-card.gradient-red p,
+.dark-mode .stat-card.gradient-cyan p {
+    color: #ffffff !important;
+}
+
+/* Quick action cards */
+.dark-mode .actions-grid .action-card {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .actions-grid .action-card:hover {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--accent-color) !important;
+}
+
+.dark-mode .actions-grid .action-card i {
+    color: var(--accent-color) !important;
+}
+
+.dark-mode .actions-grid .action-card span {
+    color: var(--text-primary) !important;
+}
+
+/* ==========================================
+   EMPLOYEE LIST / STAFF PAGES
+   ========================================== */
+.dark-mode .employee-list-container {
+    background: var(--bg-primary) !important;
+}
+
+.dark-mode .page-header .header-left h1,
+.dark-mode .board-header h2 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .subtitle {
+    color: var(--text-tertiary) !important;
+}
+
+.dark-mode .stat-box {
+    background: var(--bg-card) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .stat-box:hover {
+    box-shadow: var(--shadow-hover) !important;
+}
+
+.dark-mode .stat-content h3 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .stat-content p {
+    color: var(--text-tertiary) !important;
+}
+
+.dark-mode .btn-export {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .btn-export:hover {
+    border-color: var(--accent-color) !important;
+    color: var(--accent-color) !important;
+}
+
+.dark-mode .filters-section {
+    background: transparent !important;
+}
+
+.dark-mode .filters-section .search-box input {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .search-box i {
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .clear-search {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .filter-dropdown,
+.dark-mode .filter-select,
+.dark-mode .filter-controls select {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .filter-select option {
+    background: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .view-toggle {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .view-toggle button {
+    background: transparent !important;
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .view-toggle button.active {
+    background: var(--accent-color) !important;
+    color: #ffffff !important;
+}
+
+.dark-mode .view-toggle button:hover:not(.active) {
+    background: var(--bg-tertiary) !important;
+}
+
+.dark-mode .results-info p {
+    color: var(--text-tertiary) !important;
+}
+
+/* Table View */
+.dark-mode .table-container,
+.dark-mode .employees-table-wrapper {
+    background: var(--bg-card) !important;
+    border-radius: 12px;
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .employees-table {
+    background: var(--bg-card) !important;
+}
+
+.dark-mode .employees-table thead {
+    background: var(--bg-tertiary) !important;
+}
+
+.dark-mode .employees-table th {
+    color: var(--text-primary) !important;
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .employees-table td {
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .employees-table tbody tr {
+    background: var(--bg-card) !important;
+}
+
+.dark-mode .employees-table tbody tr:hover {
+    background: var(--bg-secondary) !important;
+}
+
+.dark-mode .table-employee strong {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .table-employee span {
+    color: var(--text-tertiary) !important;
+}
+
+.dark-mode .table-employee code {
+    background: var(--bg-tertiary) !important;
+    color: var(--accent-color) !important;
+}
+
+.dark-mode .dept-badge {
+    background: rgba(129, 140, 248, 0.2) !important;
+    color: var(--accent-color) !important;
+}
+
+.dark-mode .btn-icon.view {
+    background: rgba(56, 178, 172, 0.2) !important;
+    color: #38b2ac !important;
+}
+
+.dark-mode .btn-icon.edit {
+    background: rgba(33, 150, 243, 0.2) !important;
+    color: #42a5f5 !important;
+}
+
+.dark-mode .btn-icon.delete {
+    background: rgba(245, 101, 101, 0.2) !important;
+    color: #f87171 !important;
+}
+
+/* Employee Cards Grid */
+.dark-mode .employees-grid {
+    background: transparent !important;
+}
+
+.dark-mode .employee-card,
+.dark-mode .staff-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .employee-card:hover,
+.dark-mode .staff-card:hover {
+    box-shadow: var(--shadow-hover) !important;
+}
+
+.dark-mode .employee-card-header {
+    background: transparent !important;
+}
+
+.dark-mode .employee-card-body {
+    background: transparent !important;
+}
+
+.dark-mode .employee-card-body h3,
+.dark-mode .employee-card h3,
+.dark-mode .staff-card h3,
+.dark-mode .employee-name {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .employee-id {
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .employee-position {
+    color: var(--text-tertiary) !important;
+}
+
+.dark-mode .employee-card p,
+.dark-mode .employee-card span,
+.dark-mode .staff-card p,
+.dark-mode .staff-card span,
+.dark-mode .employee-role,
+.dark-mode .employee-department,
+.dark-mode .employee-email {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .meta-item {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .meta-item i {
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .employee-card-footer {
+    background: transparent !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .btn-card-action {
+    background: var(--bg-tertiary) !important;
+    color: var(--accent-color) !important;
+}
+
+.dark-mode .btn-card-action:hover {
+    background: var(--accent-color) !important;
+    color: #ffffff !important;
+}
+
+.dark-mode .btn-action.edit {
+    background: rgba(33, 150, 243, 0.2) !important;
+    color: #42a5f5 !important;
+}
+
+.dark-mode .btn-action.delete {
+    background: rgba(245, 101, 101, 0.2) !important;
+    color: #f87171 !important;
+}
+
+.dark-mode .status-badge.active {
+    background: rgba(74, 222, 128, 0.2) !important;
+    color: #4ade80 !important;
+}
+
+.dark-mode .status-badge.inactive {
+    background: rgba(248, 113, 113, 0.2) !important;
+    color: #f87171 !important;
+}
+
+.dark-mode .employee-actions button {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .employee-actions button:hover {
+    background: var(--accent-color) !important;
+    color: #ffffff !important;
+}
+
+/* Pagination */
+.dark-mode .pagination-btn {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .pagination-btn:hover:not(:disabled) {
+    border-color: var(--accent-color) !important;
+    color: var(--accent-color) !important;
+}
+
+.dark-mode .pagination-number {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .pagination-number:hover {
+    border-color: var(--accent-color) !important;
+    color: var(--accent-color) !important;
+}
+
+.dark-mode .pagination-number.active {
+    background: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+    color: #ffffff !important;
+}
+
+.dark-mode .pagination-dots {
+    color: var(--text-muted) !important;
+}
+
+/* Empty State */
+.dark-mode .empty-state {
+    background: var(--bg-card) !important;
+}
+
+.dark-mode .empty-icon {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .empty-state h3 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .empty-state p {
+    color: var(--text-secondary) !important;
+}
+
+/* Loading State */
+.dark-mode .loading-state {
+    background: var(--bg-card) !important;
+}
+
+.dark-mode .loading-spinner {
+    border-color: var(--bg-tertiary) !important;
+    border-top-color: var(--accent-color) !important;
+}
+
+/* Modal Styling */
+.dark-mode .modal-content {
+    background: var(--bg-card) !important;
+}
+
+.dark-mode .modal-close {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .modal-close:hover {
+    background: var(--border-light) !important;
+}
+
+/* ==========================================
+   ADD EMPLOYEE FORM
+   ========================================== */
+.dark-mode .add-employee-container {
+    background: var(--bg-primary) !important;
+}
+
+.dark-mode .form-header h1 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .form-header p {
+    color: var(--text-tertiary) !important;
+}
+
+.dark-mode .back-btn {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .back-btn:hover {
+    border-color: var(--accent-color) !important;
+    color: var(--accent-color) !important;
+}
+
+.dark-mode .step-indicator::before {
+    background: var(--border-color) !important;
+}
+
+.dark-mode .step-number {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .step.active .step-number {
+    background: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+    color: #ffffff !important;
+}
+
+.dark-mode .step-label {
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .step.active .step-label {
+    color: var(--accent-color) !important;
+}
+
+.dark-mode .employee-form {
+    background: var(--bg-card) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .step-title {
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .step-title i {
+    color: var(--accent-color) !important;
+}
+
+.dark-mode .image-upload-label {
+    border-color: var(--border-color) !important;
+    background: var(--bg-secondary) !important;
+}
+
+.dark-mode .image-upload-label:hover {
+    border-color: var(--accent-color) !important;
+}
+
+.dark-mode .upload-placeholder {
+    color: var(--text-muted) !important;
+}
+
+.dark-mode .image-hint {
+    color: var(--text-tertiary) !important;
+}
+
+.dark-mode .form-group label {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .form-group input,
+.dark-mode .form-group select,
+.dark-mode .form-group textarea {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .form-group input:focus,
+.dark-mode .form-group select:focus,
+.dark-mode .form-group textarea:focus {
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2) !important;
+}
+
+.dark-mode .form-actions {
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .btn-cancel {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .btn-cancel:hover {
+    background: var(--border-light) !important;
+}
+
+.dark-mode .btn-next,
+.dark-mode .btn-prev {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .btn-next:hover,
+.dark-mode .btn-prev:hover {
+    border-color: var(--accent-color) !important;
+    color: var(--accent-color) !important;
+}
+
+/* ==========================================
+   TASK BOARD
+   ========================================== */
+.dark-mode .task-board-container {
+    background: var(--bg-primary) !important;
+}
+
+.dark-mode .board-column {
+    background: var(--bg-secondary) !important;
+}
+
+.dark-mode .column-header {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .column-title h3 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .column-count {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .task-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .task-card:hover {
+    box-shadow: var(--shadow-hover) !important;
+}
+
+.dark-mode .task-card h4,
+.dark-mode .task-title {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .task-card p,
+.dark-mode .task-description {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .task-meta,
+.dark-mode .task-date,
+.dark-mode .task-assignee {
+    color: var(--text-tertiary) !important;
+}
+
+.dark-mode .task-tags span,
+.dark-mode .task-tag {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-secondary) !important;
+}
+
+/* ==========================================
+   ATTENDANCE TRACKER
+   ========================================== */
+.dark-mode .attendance-tracker {
+    background: var(--bg-card) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .tracker-body {
+    background: var(--bg-card) !important;
+}
+
+.dark-mode .check-in-section,
+.dark-mode .active-session {
+    background: var(--bg-card) !important;
+}
+
+.dark-mode .welcome-message h3 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .welcome-message p {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .timer-display {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .timer-display h2 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .session-info,
+.dark-mode .session-details {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .session-info p,
+.dark-mode .session-details span {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .break-section {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .break-section h4 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .break-item {
+    background: var(--bg-card) !important;
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .btn-break,
+.dark-mode .btn-checkout {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .history-section {
+    background: var(--bg-card) !important;
+}
+
+.dark-mode .history-section h3 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .history-item,
+.dark-mode .attendance-record {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .history-item span,
+.dark-mode .attendance-record span {
+    color: var(--text-secondary) !important;
+}
+
+/* ==========================================
+   LEAVE MANAGEMENT
+   ========================================== */
+.dark-mode .leave-container,
+.dark-mode .leave-page,
+.dark-mode .apply-leave-container {
+    background: var(--bg-primary) !important;
+}
+
+.dark-mode .leave-card,
+.dark-mode .leave-request-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .leave-card:hover,
+.dark-mode .leave-request-card:hover {
+    box-shadow: var(--shadow-hover) !important;
+}
+
+.dark-mode .leave-card h3,
+.dark-mode .leave-type,
+.dark-mode .leave-request-card h4 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .leave-card p,
+.dark-mode .leave-dates,
+.dark-mode .leave-reason,
+.dark-mode .leave-request-card p {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .leave-balance {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .leave-balance h4 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .leave-balance span,
+.dark-mode .balance-value {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .leave-form {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .leave-form label {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .leave-stats,
+.dark-mode .leave-summary {
+    background: var(--bg-secondary) !important;
+}
+
+.dark-mode .leave-stats h4,
+.dark-mode .leave-summary h4 {
+    color: var(--text-primary) !important;
+}
+
+/* ==========================================
+   SALARY / PAYROLL
+   ========================================== */
+.dark-mode .salary-container,
+.dark-mode .payroll-container,
+.dark-mode .manage-salary-container {
+    background: var(--bg-primary) !important;
+}
+
+.dark-mode .salary-card,
+.dark-mode .payslip-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .salary-card h3,
+.dark-mode .payslip-card h3 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .salary-card p,
+.dark-mode .payslip-card p,
+.dark-mode .salary-amount,
+.dark-mode .salary-details span {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .salary-breakdown,
+.dark-mode .earnings-section,
+.dark-mode .deductions-section {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .salary-breakdown h4,
+.dark-mode .earnings-section h4,
+.dark-mode .deductions-section h4 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .salary-row,
+.dark-mode .breakdown-row {
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .salary-total,
+.dark-mode .net-salary {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* ==========================================
+   DOCUMENTS
+   ========================================== */
+.dark-mode .document-container,
+.dark-mode .documents-page,
+.dark-mode .document-upload-container {
+    background: var(--bg-primary) !important;
+}
+
+.dark-mode .document-card,
+.dark-mode .file-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .document-card:hover,
+.dark-mode .file-card:hover {
+    box-shadow: var(--shadow-hover) !important;
+}
+
+.dark-mode .document-card h4,
+.dark-mode .file-name {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .document-card p,
+.dark-mode .file-info,
+.dark-mode .file-size,
+.dark-mode .upload-date {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .upload-zone,
+.dark-mode .dropzone {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .upload-zone:hover,
+.dark-mode .dropzone:hover {
+    border-color: var(--accent-color) !important;
+}
+
+.dark-mode .upload-zone p,
+.dark-mode .dropzone p {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .document-list,
+.dark-mode .files-list {
+    background: var(--bg-card) !important;
+}
+
+.dark-mode .document-item,
+.dark-mode .file-item {
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .document-item:hover,
+.dark-mode .file-item:hover {
+    background: var(--bg-secondary) !important;
+}
+
+/* ==========================================
+   DEPARTMENT
+   ========================================== */
+.dark-mode .department-container,
+.dark-mode .departments-page {
+    background: var(--bg-primary) !important;
+}
+
+.dark-mode .department-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .department-card:hover {
+    box-shadow: var(--shadow-hover) !important;
+}
+
+.dark-mode .department-card h3,
+.dark-mode .department-name {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .department-card p,
+.dark-mode .department-info,
+.dark-mode .employee-count {
+    color: var(--text-secondary) !important;
+}
+
+/* ==========================================
+   NOTIFICATIONS
+   ========================================== */
+.dark-mode .notifications-container,
+.dark-mode .notifications-page {
+    background: var(--bg-primary) !important;
+}
+
+.dark-mode .notification-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .notification-card:hover {
+    background: var(--bg-secondary) !important;
+}
+
+.dark-mode .notification-card h4,
+.dark-mode .notification-title {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .notification-card p,
+.dark-mode .notification-message,
+.dark-mode .notification-time {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .notification-card.unread {
+    border-left-color: var(--accent-color) !important;
+}
+
+/* ==========================================
+   REPORTS / ANALYTICS
+   ========================================== */
+.dark-mode .reports-container,
+.dark-mode .analytics-page,
+.dark-mode .report-generator {
+    background: var(--bg-primary) !important;
+}
+
+.dark-mode .report-card,
+.dark-mode .analytics-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.dark-mode .report-card h3,
+.dark-mode .analytics-card h3 {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .report-card p,
+.dark-mode .analytics-card p {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .report-filters,
+.dark-mode .date-range-picker {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* ==========================================
+   GENERIC OVERRIDES FOR COMMON PATTERNS
+   ========================================== */
+
+/* Any container with light backgrounds */
+.dark-mode [class*="-container"],
+.dark-mode [class*="-wrapper"],
+.dark-mode [class*="-page"] {
+    background-color: var(--bg-primary);
+}
+
+/* Any card pattern */
+.dark-mode [class*="-card"]:not([class*="gradient"]) {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Any section or box */
+.dark-mode [class*="-section"],
+.dark-mode [class*="-box"]:not(.search-box) {
+    background: var(--bg-secondary) !important;
+}
+
+/* Override inline styles with specific backgrounds */
+.dark-mode .tracker-body,
+.dark-mode .form-container,
+.dark-mode .content-area,
+.dark-mode main {
+    background: var(--bg-primary) !important;
+}
+
+/* Common text patterns */
+.dark-mode [class*="title"]:not(.column-title) {
+    color: var(--text-primary) !important;
+}
+
+.dark-mode [class*="subtitle"],
+.dark-mode [class*="description"],
+.dark-mode [class*="info"],
+.dark-mode [class*="meta"],
+.dark-mode [class*="detail"] {
+    color: var(--text-secondary) !important;
+}
+
+/* Form groups and fields */
+.dark-mode .form-group,
+.dark-mode .input-group {
+    background: transparent !important;
+}
+
+.dark-mode .form-group label,
+.dark-mode .input-group label {
+    color: var(--text-secondary) !important;
+}
+
+/* List items */
+.dark-mode li:not([class*="menu"]):not([class*="nav"]) {
+    color: var(--text-secondary) !important;
+}
+
+/* Status labels */
+.dark-mode .status-pending {
+    background: rgba(251, 146, 60, 0.2) !important;
+    color: var(--warning-color) !important;
+}
+
+.dark-mode .status-approved,
+.dark-mode .status-active {
+    background: rgba(74, 222, 128, 0.2) !important;
+    color: var(--success-color) !important;
+}
+
+.dark-mode .status-rejected,
+.dark-mode .status-inactive {
+    background: rgba(248, 113, 113, 0.2) !important;
+    color: var(--danger-color) !important;
+}
+
+/* Pagination */
+.dark-mode .pagination {
+    background: var(--bg-card) !important;
+}
+
+.dark-mode .pagination button,
+.dark-mode .page-btn {
+    background: var(--bg-secondary) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .pagination button.active,
+.dark-mode .page-btn.active {
+    background: var(--accent-color) !important;
+    color: #ffffff !important;
+}
+
+/* Tabs */
+.dark-mode .tabs,
+.dark-mode .tab-list {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .tab,
+.dark-mode .tab-item {
+    color: var(--text-secondary) !important;
+}
+
+.dark-mode .tab.active,
+.dark-mode .tab-item.active {
+    color: var(--text-primary) !important;
+    border-color: var(--accent-color) !important;
+}
+
+/* Calendar */
+.dark-mode .calendar,
+.dark-mode .calendar-container {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .calendar-header {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+.dark-mode .calendar-day {
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .calendar-day:hover {
+    background: var(--bg-tertiary) !important;
+}
+
+.dark-mode .calendar-day.today {
+    background: var(--accent-color) !important;
+    color: #ffffff !important;
+}
+
+/* Extra table styling for visibility */
+.dark-mode .tablestyle {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .tablestyle th,
+.dark-mode .tablestyle td {
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.dark-mode .tablestyle thead {
+    background: var(--table-header-bg) !important;
+}
+
+.dark-mode .tablestyle tbody tr {
+    background: var(--bg-card) !important;
+}
+
+.dark-mode .tablestyle tbody tr:hover {
+    background: var(--table-row-hover) !important;
+}

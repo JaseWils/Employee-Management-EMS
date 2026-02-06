@@ -1,0 +1,262 @@
+.attendance-tracker {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.tracker-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 24px;
+}
+
+.tracker-header h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tracker-date {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.tracker-body {
+    padding: 32px;
+}
+
+.check-in-section {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.welcome-message h3 {
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    color: #333;
+}
+
+.welcome-message p {
+    margin: 0 0 32px 0;
+    color: #666;
+    font-size: 16px;
+}
+
+.btn-check-in {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 16px 48px;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-check-in:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+.btn-check-in:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.active-session {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.timer-display {
+    text-align: center;
+    margin-bottom: 32px;
+    position: relative;
+}
+
+.timer-label {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.timer-value {
+    display: block;
+    font-size: 56px;
+    font-weight: 700;
+    color: #667eea;
+    font-family: 'Courier New', monospace;
+}
+
+.break-badge {
+    display: inline-block;
+    background: #ff9800;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 12px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.session-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.info-item i {
+    font-size: 24px;
+    color: #667eea;
+    min-width: 30px;
+    text-align: center;
+}
+
+.info-item div {
+    flex: 1;
+}
+
+.info-label {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.action-buttons button {
+    flex: 1;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.btn-break {
+    background: #fff3cd;
+    color: #856404;
+    border: 2px solid #ffc107;
+}
+
+.btn-break.active {
+    background: #ffc107;
+    color: white;
+}
+
+.btn-break:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+.btn-check-out {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.btn-check-out:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(245, 87, 108, 0.3);
+}
+
+.btn-check-out:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.session-complete {
+    text-align: center;
+    padding: 32px;
+    background: #d4edda;
+    border-radius: 8px;
+    margin-top: 24px;
+}
+
+.session-complete i {
+    font-size: 48px;
+    color: #28a745;
+    margin-bottom: 12px;
+}
+
+.session-complete p {
+    margin: 8px 0;
+    font-size: 16px;
+    color: #155724;
+}
+
+.overtime-badge {
+    background: #ffc107;
+    color: #856404;
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 12px !important;
+    font-weight: 600;
+}
+
+.btn-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@media (max-width: 768px) {
+    .session-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .timer-value {
+        font-size: 40px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+}
