@@ -11,6 +11,7 @@ import TopNavBar from './components/Navigation/TopNavBar';
 
 // Pages
 import Login from './components/Authentication/Login';
+import Signup from './components/Authentication/Signup';
 import ModernDashboard from './components/Dashboard/ModernDashboard';
 import AddStaff from './components/Staff/AddStaff';
 import EmployeeList from './components/Staff/EmployeeList';
@@ -98,8 +99,9 @@ function App() {
                     <Routes>
                         {/* Public Routes */}
                         <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<Signup />} />
 
-                        {/* Protected Routes */}
+                        {/* Protected Routes */
                         <Route path="/" element={
                             <ProtectedRoute>
                                 <MainLayout><ModernDashboard /></MainLayout>
