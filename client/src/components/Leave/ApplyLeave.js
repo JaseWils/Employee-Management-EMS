@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -17,7 +17,7 @@ const ApplyLeave = () => {
     const [errors, setErrors] = useState({});
 
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const employeeId = user.id;
+    const employeeId = user._id || user.id;
 
     const leaveTypes = [
         { value: 'sick', label: 'Sick Leave', icon: '🏥' },
@@ -78,7 +78,8 @@ const ApplyLeave = () => {
         }
 
         if (!employeeId) {
-            toast.error('Employee ID not found. Please login again.');
+            toast.error('User session invalid. Please login again.');
+            navigate('/login');
             return;
         }
 

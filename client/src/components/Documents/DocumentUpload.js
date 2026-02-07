@@ -97,25 +97,32 @@ const DocumentUpload = ({ employeeId, onUploadSuccess }) => {
                 }
             );
 
-            toast.success('✅ Document uploaded successfully!');
-            
-            // Reset form
-            setFormData({
-                title: '',
-                documentType: '',
-                description: '',
-                expiryDate: '',
-                tags: '',
-                isPublic: false
-            });
-            setFile(null);
-            setProgress(0);
-            
-            if (onUploadSuccess) {
-                onUploadSuccess(response.data.data);
+            if (response.data.success) {
+                toast.success('✅ Document uploaded successfully!');
+                
+                // Reset form
+                setFormData({
+                    title: '',
+                    documentType: '',
+                    description: '',
+                    expiryDate: '',
+                    tags: '',
+                    isPublic: false
+                });
+                setFile(null);
+                setProgress(0);
+                
+                if (onUploadSuccess) {
+                    onUploadSuccess(response.data.data);
+                }
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Error uploading document');
+            console.error('Upload error:', error);
+            if (error.response?.status === 503) {
+                toast.error('⚠️ Document upload service is not configured. Please contact administrator.');
+            } else {
+                toast.error(error.response?.data?.message || 'Error uploading document');
+            }
         } finally {
             setUploading(false);
         }

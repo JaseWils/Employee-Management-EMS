@@ -1,20 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import './PayrollProcess.css';
 
 const PayrollProcess = () => {
-    const [employees, setEmployees] = useState([]);
     const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
     const [loading, setLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
     const [payrollData, setPayrollData] = useState([]);
 
-    useEffect(() => {
-        fetchEmployeesAndSalaries();
-    }, [selectedMonth]);
+    const calculatePayroll = useCallback((empList) => {
+        const payroll = empList.map(emp => {
+            if (!emp.salaryInfo) {
+                return {
+                    employee: emp,
+                    basicSalary: 0,
+                    totalAllowances: 0,
+                    totalDeductions: 0,
+                    netSalary: 0
+                };
+            }
 
-    const fetchEmployeesAndSalaries = async () => {
+            const basic = emp.salaryInfo.basicSalary || 0;
+            const allowances = emp.salaryInfo.allowances || {};
+            const deductions = emp.salaryInfo.deductions || {};
+
+            const totalAllowances = Object.values(allowances).reduce((sum, val) => sum + (val || 0), 0);
+            const totalDeductions = Object.values(deductions).reduce((sum, val) => sum + (val || 0), 0);
+            const netSalary = basic + totalAllowances - totalDeductions;
+
+            return {
+                employee: emp,
+                basicSalary: basic,
+                totalAllowances,
+                totalDeductions,
+                netSalary
+            };
+        });
+
+        setPayrollData(payroll);
+    }, []);
+
+    const fetchEmployeesAndSalaries = useCallback(async () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
@@ -39,7 +66,6 @@ const PayrollProcess = () => {
                 };
             });
 
-            setEmployees(combined);
             calculatePayroll(combined);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -70,44 +96,15 @@ const PayrollProcess = () => {
                     }
                 }
             ];
-            setEmployees(demoData);
             calculatePayroll(demoData);
         } finally {
             setLoading(false);
         }
-    };
+    }, [calculatePayroll]);
 
-    const calculatePayroll = (empList) => {
-        const payroll = empList.map(emp => {
-            if (!emp.salaryInfo) {
-                return {
-                    employee: emp,
-                    basicSalary: 0,
-                    totalAllowances: 0,
-                    totalDeductions: 0,
-                    netSalary: 0
-                };
-            }
-
-            const basic = emp.salaryInfo.basicSalary || 0;
-            const allowances = emp.salaryInfo.allowances || {};
-            const deductions = emp.salaryInfo.deductions || {};
-
-            const totalAllowances = Object.values(allowances).reduce((sum, val) => sum + (val || 0), 0);
-            const totalDeductions = Object.values(deductions).reduce((sum, val) => sum + (val || 0), 0);
-            const netSalary = basic + totalAllowances - totalDeductions;
-
-            return {
-                employee: emp,
-                basicSalary: basic,
-                totalAllowances,
-                totalDeductions,
-                netSalary
-            };
-        });
-
-        setPayrollData(payroll);
-    };
+    useEffect(() => {
+        fetchEmployeesAndSalaries();
+    }, [selectedMonth, fetchEmployeesAndSalaries]);
 
     const getTotalPayroll = () => {
         return payrollData.reduce((sum, p) => sum + p.netSalary, 0);
@@ -121,18 +118,27 @@ const PayrollProcess = () => {
         setProcessing(true);
         try {
             const token = localStorage.getItem('token');
-            await axios.post(
-                `${process.env.REACT_APP_API_URL}/api/v1/payroll/process`,
+            
+            const [year, month] = selectedMonth.split('-');
+            const employeeIds = payrollData.map(p => p.employee._id);
+            
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/api/v1/payroll/generate`,
                 {
-                    month: selectedMonth,
-                    payrollData
+                    month: parseInt(month),
+                    year: parseInt(year),
+                    employeeIds
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
-            toast.success('✅ Payroll processed successfully!');
+            if (response.data.success) {
+                toast.success(`✅ Payroll processed successfully! Generated ${response.data.data.length} records.`);
+                // Optionally navigate to payroll list
+            }
         } catch (error) {
-            toast.error('Error processing payroll');
+            console.error('Payroll error:', error);
+            toast.error(error.response?.data?.message || 'Error processing payroll');
         } finally {
             setProcessing(false);
         }

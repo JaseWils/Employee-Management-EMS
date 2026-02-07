@@ -29,6 +29,8 @@ import Performance from './components/Performance/Performance';
 import AnalyticsDashboard from './components/Analytics/AnalyticsDashboard';
 import Settings from './components/Settings/Settings';
 import DepartmentManagement from './components/Departments/DepartmentManagement';
+import HelpCenter from './components/Help/HelpCenter';
+import Privacy from './components/Privacy/Privacy';
 
 import './App.css';
 
@@ -196,6 +198,16 @@ function App() {
                         <Route path="/settings" element={
                             <ProtectedRoute>
                                 <MainLayout><Settings /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/help" element={
+                            <ProtectedRoute>
+                                <MainLayout><HelpCenter /></MainLayout>
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/privacy" element={
+                            <ProtectedRoute>
+                                <MainLayout><Privacy /></MainLayout>
                             </ProtectedRoute>
                         } />
 
