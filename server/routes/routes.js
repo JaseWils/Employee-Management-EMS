@@ -10,8 +10,10 @@ const checkEmail = require('../controllers/checkEmail');
 const checkPassword = require('../controllers/checkPassword');
 const checkAdmin = require('../controllers/checkAdmin');
 const { sendOtp, verifyOtp } = require('../controllers/otpController');
+const signup = require('../controllers/Authentication/Signup');
 
 router.post('/register', UserRegistration);
+router.post('/signup', signup);
 router.post('/email', checkEmail);
 router.post('/password', checkPassword);
 router.get('/check-admin', authMiddleware, checkAdmin);

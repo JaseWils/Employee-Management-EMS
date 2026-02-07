@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import './Login.css';
@@ -73,7 +73,9 @@ const Login = () => {
                         </div>
                         <button type="submit" className="btn-login" disabled={loading}>{loading ? 'Signing in...' : 'Sign In'}</button>
                     </form>
-                    <p>Don't have an account? <a href="/signup">Sign up</a></p>
+                    <div className="auth-footer">
+                        <p>Don't have an account? <Link to="/signup" className="auth-link">Sign up</Link></p>
+                    </div>
                 </div>
             </div>
         </div>
