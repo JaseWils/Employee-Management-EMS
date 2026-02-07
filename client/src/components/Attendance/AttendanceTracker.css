@@ -1,0 +1,202 @@
+.attendance-tracker {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.attendance-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: white;
+}
+
+.attendance-header h1 {
+    margin: 0 0 8px 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.date-time {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
+.time-display {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 60px 40px;
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom: 40px;
+    color: white;
+}
+
+.current-time {
+    font-size: 64px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    font-family: 'Courier New', monospace;
+}
+
+.greeting {
+    font-size: 24px;
+    margin: 0 0 8px 0;
+}
+
+.ready-text {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.attendance-actions {
+    text-align: center;
+}
+
+.btn-check-in,
+.btn-check-out {
+    padding: 20px 60px;
+    border: none;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-check-in {
+    background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+    color: white;
+}
+
+.btn-check-out {
+    background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+    color: white;
+}
+
+.btn-check-in:hover,
+.btn-check-out:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.btn-check-in:disabled,
+.btn-check-out:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+.checked-in-state,
+.checked-out-state {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.status-card {
+    background: white;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.status-card i {
+    font-size: 48px;
+    color: #56ab2f;
+    margin-bottom: 16px;
+}
+
+.status-card h3 {
+    margin: 0 0 16px 0;
+    font-size: 24px;
+    color: var(--text-primary);
+}
+
+.status-card p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.time-summary {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.time-summary > div {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.time-summary span {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+}
+
+.time-summary strong {
+    font-size: 18px;
+    color: var(--text-primary);
+}
+
+.error-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.error-state i {
+    font-size: 48px;
+    color: #f56565;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .current-time {
+        font-size: 48px;
+    }
+    
+    .btn-check-in,
+    .btn-check-out {
+        padding: 16px 40px;
+        font-size: 16px;
+    }
+    
+    .time-summary {
+        flex-direction: column;
+        gap: 20px;
+    }
+}

@@ -1,0 +1,243 @@
+.document-list-container {
+    padding: 32px;
+    background: var(--bg-primary);
+    min-height: 100vh;
+}
+
+.document-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+}
+
+.document-header h1 {
+    margin: 0 0 8px 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.document-header p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.btn-upload {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.btn-upload:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+.documents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}
+
+.document-card {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px solid var(--border-color);
+    transition: all 0.3s;
+    position: relative;
+}
+
+.document-card:hover {
+    border-color: #667eea;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
+}
+
+.doc-icon {
+    font-size: 64px;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.doc-info h4 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.doc-type {
+    font-size: 12px;
+    color: #667eea;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+}
+
+.doc-uploader,
+.doc-date {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 4px 0;
+}
+
+.status-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-pending {
+    background: #fff5e6;
+    color: #ed8936;
+}
+
+.status-verified {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.doc-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-view,
+.btn-download {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.3s;
+}
+
+.btn-view {
+    background: #ebf4ff;
+    color: #2196f3;
+}
+
+.btn-download {
+    background: #d4edda;
+    color: #155724;
+}
+
+.btn-view:hover {
+    background: #2196f3;
+    color: white;
+}
+
+.btn-download:hover {
+    background: #48bb78;
+    color: white;
+}
+
+.file-upload-area {
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+    transition: all 0.3s;
+}
+
+.file-upload-area:hover {
+    border-color: #667eea;
+    background: var(--bg-tertiary);
+}
+
+.file-upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.file-upload-label i {
+    font-size: 48px;
+    color: #667eea;
+}
+
+.file-upload-label span {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.file-upload-label small {
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    background: var(--bg-secondary);
+    border-radius: 16px;
+}
+
+.empty-state i {
+    font-size: 80px;
+    color: var(--text-tertiary);
+    margin-bottom: 24px;
+}
+
+.empty-state h3 {
+    margin: 0 0 12px 0;
+    font-size: 24px;
+    color: var(--text-primary);
+}
+
+.empty-state p {
+    margin: 0 0 24px 0;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+    .document-list-container {
+        padding: 16px;
+    }
+
+    .document-header {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .btn-upload {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .documents-grid {
+        grid-template-columns: 1fr;
+    }
+}

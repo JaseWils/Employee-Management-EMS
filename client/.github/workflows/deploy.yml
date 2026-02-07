@@ -1,0 +1,86 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deploy to server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        command_timeout: 10m
+        script: |
+          set -e
+          echo "🚀 Starting deployment..."
+          
+          cd /var/www/employee-management
+          echo "📥 Pulling latest changes..."
+          git pull origin main
+          
+          echo "🐳 Stopping containers..."
+          docker-compose down
+          
+          echo "📦 Pulling latest images..."
+          docker-compose pull
+          
+          echo "🚀 Starting containers..."
+          docker-compose up -d
+          
+          echo "🧹 Cleaning up..."
+          docker system prune -af --volumes
+          
+          echo "✅ Deployment complete!"
+
+    - name: Health check
+      run: |
+        echo "⏳ Waiting for services to start..."
+        sleep 30
+        
+        echo "🔍 Checking server health..."
+        MAX_RETRIES=5
+        RETRY_COUNT=0
+        
+        until [ $RETRY_COUNT -ge $MAX_RETRIES ]
+        do
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.SERVER_HOST }}/health || echo "000")
+          
+          if [ "$HTTP_CODE" = "200" ]; then
+            echo "✅ Server is healthy!"
+            exit 0
+          fi
+          
+          RETRY_COUNT=$((RETRY_COUNT+1))
+          echo "⚠️ Attempt $RETRY_COUNT/$MAX_RETRIES failed (HTTP $HTTP_CODE). Retrying in 10s..."
+          sleep 10
+        done
+        
+        echo "❌ Health check failed after $MAX_RETRIES attempts"
+        exit 1
+
+    - name: Rollback on failure
+      if: failure()
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /var/www/employee-management
+          echo "🔄 Rolling back to previous version..."
+          git reset --hard HEAD~1
+          docker-compose down
+          docker-compose up -d
+          echo "✅ Rollback complete"

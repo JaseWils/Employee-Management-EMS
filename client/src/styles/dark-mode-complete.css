@@ -1,0 +1,366 @@
+/* ============================================
+   COMPLETE DARK MODE IMPLEMENTATION
+   ============================================ */
+
+/* Dark Mode Variables */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #f7fafc;
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-tertiary: #718096;
+    --border-color: #e2e8f0;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.1);
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --input-bg: #ffffff;
+    --card-bg: #ffffff;
+}
+
+.dark-mode {
+    --bg-primary: #1a202c;
+    --bg-secondary: #2d3748;
+    --bg-tertiary: #4a5568;
+    --text-primary: #f7fafc;
+    --text-secondary: #e2e8f0;
+    --text-tertiary: #cbd5e0;
+    --border-color: #4a5568;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.4);
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --input-bg: #2d3748;
+    --card-bg: #2d3748;
+}
+
+/* Global Dark Mode Styles */
+.dark-mode body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* All Text Elements */
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6 {
+    color: var(--text-primary);
+}
+
+.dark-mode p,
+.dark-mode span,
+.dark-mode label,
+.dark-mode a {
+    color: var(--text-secondary);
+}
+
+/* All Containers */
+.dark-mode .modern-dashboard,
+.dark-mode .employee-list-container,
+.dark-mode .add-staff-container,
+.dark-mode .apply-leave-container,
+.dark-mode .leave-requests-container,
+.dark-mode .attendance-tracker,
+.dark-mode .task-board-container,
+.dark-mode .document-list-container,
+.dark-mode .add-employee-container {
+    background: var(--bg-primary);
+}
+
+/* All Cards */
+.dark-mode .stat-card,
+.dark-mode .employee-card,
+.dark-mode .chart-card,
+.dark-mode .employee-form,
+.dark-mode .modal-content,
+.dark-mode .leave-request-card,
+.dark-mode .document-card,
+.dark-mode .task-card,
+.dark-mode .stat-box,
+.dark-mode .kpi-card,
+.dark-mode .action-card,
+.dark-mode .leave-type-card,
+.dark-mode .kanban-column,
+.dark-mode .apply-leave-form,
+.dark-mode .task-board-form {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+/* All Inputs */
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+    background: var(--input-bg);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.dark-mode input::placeholder,
+.dark-mode textarea::placeholder {
+    color: var(--text-tertiary);
+}
+
+.dark-mode input:focus,
+.dark-mode select:focus,
+.dark-mode textarea:focus {
+    background: var(--input-bg);
+    border-color: #667eea;
+}
+
+/* Navigation */
+.dark-mode .top-navbar,
+.dark-mode .modern-sidebar {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+.dark-mode .nav-item {
+    color: var(--text-secondary);
+}
+
+.dark-mode .nav-item:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.dark-mode .nav-item.active {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+/* Tables */
+.dark-mode .employees-table,
+.dark-mode table {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.dark-mode .employees-table thead,
+.dark-mode table thead {
+    background: var(--bg-tertiary);
+}
+
+.dark-mode .employees-table td,
+.dark-mode table td {
+    border-top-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+.dark-mode .employees-table th,
+.dark-mode table th {
+    color: var(--text-secondary);
+}
+
+/* Buttons */
+.dark-mode .btn-secondary {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+.dark-mode .btn-secondary:hover {
+    background: var(--bg-primary);
+}
+
+/* Modals */
+.dark-mode .modal-content {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.dark-mode .modal-header {
+    border-bottom-color: var(--border-color);
+}
+
+.dark-mode .modal-footer {
+    border-top-color: var(--border-color);
+}
+
+/* Dropdowns */
+.dark-mode .notification-dropdown,
+.dark-mode .user-dropdown {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .notification-item,
+.dark-mode .user-dropdown a {
+    color: var(--text-primary);
+    border-bottom-color: var(--border-color);
+}
+
+.dark-mode .notification-item:hover,
+.dark-mode .user-dropdown a:hover {
+    background: var(--bg-tertiary);
+}
+
+/* Forms */
+.dark-mode .form-section {
+    border-bottom-color: var(--border-color);
+}
+
+.dark-mode .form-summary {
+    background: var(--bg-tertiary);
+}
+
+.dark-mode .search-box input,
+.dark-mode .filter-select {
+    background: var(--input-bg);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Specific Component Fixes */
+.dark-mode .dashboard-header {
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    color: white;
+}
+
+.dark-mode .time-display {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.dark-mode .status-card {
+    background: var(--bg-secondary);
+}
+
+.dark-mode .column-header {
+    background: var(--bg-tertiary);
+}
+
+.dark-mode .empty-state,
+.dark-mode .loading-state {
+    background: var(--bg-secondary);
+}
+
+/* Filters and Tabs */
+.dark-mode .filter-tabs {
+    background: var(--bg-secondary);
+}
+
+.dark-mode .filter-tabs button {
+    color: var(--text-secondary);
+}
+
+.dark-mode .filter-tabs button:hover {
+    background: var(--bg-tertiary);
+}
+
+.dark-mode .filter-tabs button.active {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+/* Code/ID Display */
+.dark-mode code {
+    background: var(--bg-tertiary);
+    color: #667eea;
+}
+
+/* Scrollbars */
+.dark-mode ::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+}
+
+.dark-mode ::-webkit-scrollbar-thumb {
+    background: #4a5568;
+}
+
+.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #667eea;
+}
+
+/* Links */
+.dark-mode a {
+    color: #667eea;
+}
+
+.dark-mode a:hover {
+    color: #764ba2;
+}
+
+/* Badges */
+.dark-mode .badge {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+/* File Upload */
+.dark-mode .file-upload-area {
+    border-color: var(--border-color);
+    background: var(--bg-tertiary);
+}
+
+.dark-mode .file-upload-label {
+    background: var(--bg-secondary);
+}
+
+/* Specific Fix for Readability Issues */
+.dark-mode .employee-id,
+.dark-mode .subtitle,
+.dark-mode .help-text,
+.dark-mode small {
+    color: var(--text-tertiary);
+}
+
+.dark-mode .error-text {
+    color: #f56565;
+}
+
+.dark-mode .success-text {
+    color: #48bb78;
+}
+
+/* Fix for White Text on White Background */
+.dark-mode .white-text {
+    color: var(--text-primary) !important;
+}
+
+/* Sidebar Specific */
+.dark-mode .sidebar-header {
+    border-bottom-color: var(--border-color);
+}
+
+.dark-mode .sidebar-footer {
+    border-top-color: var(--border-color);
+}
+
+.dark-mode .user-profile-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Dashboard Specific Cards */
+.dark-mode .stat-card.gradient-blue,
+.dark-mode .stat-card.gradient-green,
+.dark-mode .stat-card.gradient-orange,
+.dark-mode .stat-card.gradient-purple,
+.dark-mode .stat-card.gradient-red,
+.dark-mode .stat-card.gradient-cyan {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.dark-mode .stat-card::before {
+    opacity: 0.8;
+}
+
+/* Ensure all icons are visible */
+.dark-mode i {
+    color: inherit;
+}
+
+/* Fix for image placeholders */
+.dark-mode .image-placeholder {
+    background: var(--bg-tertiary);
+    color: var(--text-tertiary);
+}
+
+/* Transitions */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

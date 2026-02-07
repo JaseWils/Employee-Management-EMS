@@ -1,0 +1,47 @@
+.dark-mode-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.toggle-track {
+    width: 60px;
+    height: 30px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.dark-mode .toggle-track {
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+}
+
+.toggle-thumb {
+    width: 26px;
+    height: 26px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-thumb.light {
+    left: 2px;
+    color: #f59e0b;
+}
+
+.toggle-thumb.dark {
+    left: 32px;
+    color: #4a5568;
+}
+
+.toggle-thumb i {
+    font-size: 14px;
+}

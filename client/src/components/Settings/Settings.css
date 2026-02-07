@@ -1,0 +1,252 @@
+.settings-container {
+    padding: 32px;
+    background: var(--bg-primary);
+    min-height: 100vh;
+}
+
+.settings-header {
+    margin-bottom: 32px;
+}
+
+.settings-header h1 {
+    margin: 0 0 8px 0;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.settings-header p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+.settings-layout {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 32px;
+}
+
+.settings-sidebar {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 16px;
+    height: fit-content;
+}
+
+.setting-tab {
+    width: 100%;
+    padding: 14px 16px;
+    border: none;
+    background: transparent;
+    border-radius: 10px;
+    text-align: left;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin-bottom: 8px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.setting-tab:hover {
+    background: var(--bg-tertiary);
+}
+
+.setting-tab.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.setting-tab i {
+    font-size: 18px;
+}
+
+.settings-content {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 32px;
+}
+
+.settings-panel h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.panel-description {
+    margin: 0 0 32px 0;
+    color: var(--text-secondary);
+}
+
+.settings-form {
+    max-width: 600px;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 14px;
+    background: var(--input-bg);
+    color: var(--text-primary);
+    transition: all 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.disabled-input {
+    background: var(--bg-tertiary);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+}
+
+.btn-save {
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-save:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+.btn-save:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.appearance-options,
+.notification-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.option-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: var(--bg-tertiary);
+    border-radius: 12px;
+}
+
+.option-info h4 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.option-info p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.toggle-switch {
+    position: relative;
+    width: 56px;
+    height: 30px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-switch label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--border-color);
+    transition: 0.4s;
+    border-radius: 30px;
+}
+
+.toggle-switch label:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked + label {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.toggle-switch input:checked + label:before {
+    transform: translateX(26px);
+}
+
+@media (max-width: 1024px) {
+    .settings-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .settings-sidebar {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+}
+
+@media (max-width: 768px) {
+    .settings-container {
+        padding: 16px;
+    }
+
+    .settings-content {
+        padding: 20px;
+    }
+
+    .settings-sidebar {
+        grid-template-columns: 1fr;
+    }
+}

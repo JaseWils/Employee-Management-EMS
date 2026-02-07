@@ -1,0 +1,146 @@
+.verify-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+}
+
+.verify-card {
+    background: white;
+    border-radius: 20px;
+    padding: 48px;
+    text-align: center;
+    max-width: 450px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.verify-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+}
+
+.verify-icon i {
+    font-size: 36px;
+    color: white;
+}
+
+.verify-card h2 {
+    font-size: 28px;
+    color: #1a202c;
+    margin-bottom: 12px;
+}
+
+.verify-card p {
+    color: #718096;
+    margin-bottom: 4px;
+}
+
+.email-display {
+    color: #667eea !important;
+    font-weight: 600;
+    margin-bottom: 32px !important;
+}
+
+.otp-form {
+    margin-bottom: 24px;
+}
+
+.otp-inputs {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
+.otp-input {
+    width: 50px;
+    height: 60px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    color: #1a202c;
+    transition: all 0.3s;
+}
+
+.otp-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+.btn-verify {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-verify:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-verify:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.resend-section {
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.resend-section p {
+    margin-bottom: 12px;
+}
+
+.btn-resend {
+    background: none;
+    border: none;
+    color: #667eea;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.btn-resend:hover:not(:disabled) {
+    text-decoration: underline;
+}
+
+.btn-resend:disabled {
+    color: #a0aec0;
+    cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+    .verify-card {
+        padding: 32px 24px;
+    }
+    
+    .otp-input {
+        width: 42px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    .otp-inputs {
+        gap: 8px;
+    }
+}

@@ -1,0 +1,144 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: ems-mongodb-prod
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: employee-management
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - ems-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: ems-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ems-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: ems-server-prod
+    restart: always
+    ports:
+      - "5800:5800"
+    environment:
+      NODE_ENV: production
+      MONGODB_URL: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongodb:27017/employee-management?authSource=admin
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET}
+      CLIENT_URL: ${CLIENT_URL}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ems-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5800/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        REACT_APP_API_URL: ${API_URL}
+    container_name: ems-client-prod
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - server
+    networks:
+      - ems-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  nginx:
+    image: nginx:alpine
+    container_name: ems-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+    depends_on:
+      - client
+      - server
+    networks:
+      - ems-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: ems-certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+    depends_on:
+      - nginx
+    command: certonly --webroot --webroot-path=/var/www/html --email ${ADMIN_EMAIL} --agree-tos --no-eff-email --force-renewal -d ${DOMAIN_NAME}
+
+volumes:
+  mongodb_data:
+    driver: local
+  redis_data:
+    driver: local
+  certbot-etc:
+    driver: local
+  certbot-var:
+    driver: local
+
+networks:
+  ems-network:
+    driver: bridge

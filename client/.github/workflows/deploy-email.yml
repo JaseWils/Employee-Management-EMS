@@ -1,0 +1,75 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deploy to server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd /var/www/employee-management
+          git pull origin main
+          docker-compose down
+          docker-compose pull
+          docker-compose up -d
+          docker system prune -af --volumes
+
+    - name: Health check
+      run: |
+        sleep 30
+        curl -f http://${{ secrets.SERVER_HOST }}/health || exit 1
+
+    - name: Send email on success
+      if: success()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 587
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: "✅ Deployment Successful - ${{ github.repository }}"
+        body: |
+          Deployment completed successfully!
+          
+          Repository: ${{ github.repository }}
+          Branch: ${{ github.ref_name }}
+          Commit: ${{ github.sha }}
+          Author: ${{ github.actor }}
+          Time: ${{ github.event.head_commit.timestamp }}
+        to: ${{ secrets.NOTIFICATION_EMAIL }}
+        from: EMS Deployment System
+
+    - name: Send email on failure
+      if: failure()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 587
+        username: ${{ secrets.EMAIL_USERNAME }}
+        password: ${{ secrets.EMAIL_PASSWORD }}
+        subject: "❌ Deployment Failed - ${{ github.repository }}"
+        body: |
+          Deployment failed!
+          
+          Repository: ${{ github.repository }}
+          Branch: ${{ github.ref_name }}
+          Commit: ${{ github.sha }}
+          Author: ${{ github.actor }}
+          
+          Check logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        to: ${{ secrets.NOTIFICATION_EMAIL }}
+        from: EMS Deployment System
