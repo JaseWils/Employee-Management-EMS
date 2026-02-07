@@ -6,7 +6,7 @@ const Privacy = () => {
         <div className="privacy-container">
             <div className="privacy-header">
                 <h1><i className="fa fa-shield-alt"></i> Privacy Policy</h1>
-                <p>Last Updated: {new Date().toLocaleDateString()}</p>
+                <p>Last Updated: February 7, 2026</p>
             </div>
             
             <div className="privacy-content">
