@@ -27,7 +27,8 @@ const Signup = () => {
     };
 
     const validateEmail = (email) => {
-        const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        // Use a more permissive email regex that handles modern email formats
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     };
 
@@ -258,7 +259,7 @@ const Signup = () => {
                                 required
                             />
                             <label htmlFor="agreeToTerms">
-                                I agree to the <a href="/privacy" target="_blank">Terms & Conditions</a>
+                                I agree to the <a href="/privacy" target="_blank" rel="noopener noreferrer">Terms & Conditions</a>
                             </label>
                         </div>
 

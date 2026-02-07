@@ -3,6 +3,21 @@ const app = require('../index');
 const User = require('../models/User');
 
 describe('Signup Controller Tests', () => {
+    // Clean up test users after all tests
+    afterAll(async () => {
+        await User.deleteMany({
+            email: {
+                $in: [
+                    'signup@example.com',
+                    'existing@example.com',
+                    'incomplete@example.com',
+                    'defaultrole@example.com',
+                    'admin@example.com'
+                ]
+            }
+        });
+    });
+
     describe('POST /api/v1/signup', () => {
         it('should create a new user account with valid data', async () => {
             const userData = {
