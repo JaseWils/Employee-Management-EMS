@@ -121,18 +121,27 @@ const PayrollProcess = () => {
         setProcessing(true);
         try {
             const token = localStorage.getItem('token');
-            await axios.post(
-                `${process.env.REACT_APP_API_URL}/api/v1/payroll/process`,
+            
+            const [year, month] = selectedMonth.split('-');
+            const employeeIds = payrollData.map(p => p.employee._id);
+            
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/api/v1/payroll/generate`,
                 {
-                    month: selectedMonth,
-                    payrollData
+                    month: parseInt(month),
+                    year: parseInt(year),
+                    employeeIds
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
-            toast.success('✅ Payroll processed successfully!');
+            if (response.data.success) {
+                toast.success(`✅ Payroll processed successfully! Generated ${response.data.data.length} records.`);
+                // Optionally navigate to payroll list
+            }
         } catch (error) {
-            toast.error('Error processing payroll');
+            console.error('Payroll error:', error);
+            toast.error(error.response?.data?.message || 'Error processing payroll');
         } finally {
             setProcessing(false);
         }

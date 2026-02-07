@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { exportToCSV } from '../../utils/exportData';
 import './EmployeeList.css';
 
 const EmployeeList = () => {
@@ -106,6 +107,29 @@ const EmployeeList = () => {
         }
     };
 
+    const handleExportEmployees = () => {
+        const columns = [
+            { header: 'Employee ID', field: 'employeeId' },
+            { header: 'Name', field: 'fullName' },
+            { header: 'Email', field: 'email' },
+            { header: 'Department', field: 'department.name' },
+            { header: 'Position', field: 'position' },
+            { header: 'Phone', field: 'phone' },
+            { header: 'Join Date', field: 'joiningDate' },
+            { header: 'Status', field: 'isActive' }
+        ];
+        
+        const dataForExport = employees.map(emp => ({
+            ...emp,
+            'department.name': emp.department?.name || 'N/A',
+            isActive: emp.isActive ? 'Active' : 'Inactive',
+            joiningDate: new Date(emp.joiningDate).toLocaleDateString()
+        }));
+        
+        exportToCSV(dataForExport, columns, 'Employee_List');
+        toast.success('Employee list exported successfully!');
+    };
+
     // Pagination
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -202,7 +226,7 @@ const EmployeeList = () => {
                     <p className="subtitle">Manage your team members</p>
                 </div>
                 <div className="header-right">
-                    <button className="btn-export">
+                    <button className="btn-export" onClick={handleExportEmployees}>
                         <i className="fa fa-download"></i>
                         Export
                     </button>

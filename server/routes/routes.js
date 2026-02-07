@@ -81,6 +81,15 @@ router.put('/salary/edit/:id', authMiddleware, editSalary);
 router.delete('/salary/delete/:id', authMiddleware, deleteSalary);
 
 // ============================================
+// PAYROLL ROUTES
+// ============================================
+const generatePayroll = require('../controllers/Payroll/generatePayroll');
+const generatePayslip = require('../controllers/Payroll/generatePayslip');
+
+router.post('/payroll/generate', authMiddleware, generatePayroll);
+router.get('/payroll/payslip/:payrollId', authMiddleware, generatePayslip);
+
+// ============================================
 // ATTENDANCE ROUTES
 // ============================================
 const checkIn = require('../controllers/Attendance/CheckIn');
