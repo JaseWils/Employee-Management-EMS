@@ -78,11 +78,6 @@ const ApplyLeave = () => {
         }
 
         if (!employeeId) {
-            toast.error('Employee ID not found. Please login again.');
-            return;
-        }
-
-        if (!employeeId) {
             toast.error('User session invalid. Please login again.');
             navigate('/login');
             return;
