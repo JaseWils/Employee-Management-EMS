@@ -17,7 +17,7 @@ const ApplyLeave = () => {
     const [errors, setErrors] = useState({});
 
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const employeeId = user.id;
+    const employeeId = user._id || user.id; // Check both possible fields
 
     const leaveTypes = [
         { value: 'sick', label: 'Sick Leave', icon: '🏥' },
@@ -79,6 +79,12 @@ const ApplyLeave = () => {
 
         if (!employeeId) {
             toast.error('Employee ID not found. Please login again.');
+            return;
+        }
+
+        if (!employeeId) {
+            toast.error('User session invalid. Please login again.');
+            navigate('/login');
             return;
         }
 
