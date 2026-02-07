@@ -1,0 +1,123 @@
+.help-center-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.help-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.help-header h1 {
+    color: #004dff;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.help-header h1 i {
+    margin-right: 0.5rem;
+}
+
+.help-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.help-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.help-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.help-section h2 {
+    color: #333;
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #004dff;
+}
+
+.help-section h2 i {
+    margin-right: 0.5rem;
+    color: #004dff;
+}
+
+.faq-item {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border-left: 4px solid #004dff;
+}
+
+.faq-item:last-child {
+    margin-bottom: 0;
+}
+
+.faq-item h3 {
+    color: #004dff;
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+}
+
+.faq-item p {
+    color: #555;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.contact-info {
+    background: #f0f4ff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.contact-info p {
+    margin: 0.75rem 0;
+    color: #333;
+    font-size: 1rem;
+}
+
+.contact-info p i {
+    margin-right: 0.5rem;
+    color: #004dff;
+    width: 20px;
+}
+
+.contact-info a {
+    color: #004dff;
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .help-center-container {
+        padding: 1rem;
+    }
+
+    .help-header h1 {
+        font-size: 2rem;
+    }
+
+    .help-section {
+        padding: 1.5rem;
+    }
+
+    .help-section h2 {
+        font-size: 1.5rem;
+    }
+}
