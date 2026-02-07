@@ -52,7 +52,7 @@ const HelpCenter = () => {
                 </div>
 
                 <div className="faq-item">
-                    <h3">How do I export employee data?</h3>
+                    <h3>How do I export employee data?</h3>
                     <p>Go to <strong>Employees</strong> list, click the Export button at the top right to download employee data as a CSV file.</p>
                 </div>
             </section>

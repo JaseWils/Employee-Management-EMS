@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { exportToCSV } from '../../utils/exportData';
@@ -28,10 +28,6 @@ const EmployeeList = () => {
         fetchEmployees();
     }, []);
 
-    useEffect(() => {
-        filterAndSortEmployees();
-    }, [employees, searchTerm, departmentFilter, statusFilter, sortBy]);
-
     const fetchEmployees = async () => {
         setLoading(true);
         try {
@@ -49,7 +45,7 @@ const EmployeeList = () => {
         }
     };
 
-    const filterAndSortEmployees = () => {
+    const filterAndSortEmployees = useCallback(() => {
         let filtered = [...employees];
 
         // Search filter
@@ -87,7 +83,11 @@ const EmployeeList = () => {
         });
 
         setFilteredEmployees(filtered);
-    };
+    }, [employees, searchTerm, departmentFilter, statusFilter, sortBy]);
+
+    useEffect(() => {
+        filterAndSortEmployees();
+    }, [filterAndSortEmployees]);
 
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this employee?')) {
